@@ -155,17 +155,17 @@
                                             <i class="fas fa-copy"></i>
                                         </button>
                                     </div>
-                                    <pre><code>curl --proto '=https' --tlsv1.2 -sSf https://nova.sh/install | sh</code></pre>
+                                    <pre><code>curl -sSf https://raw.githubusercontent.com/m7moud2/nova-container-system/main/install.sh | sh</code></pre>
                                 </div>
-                                <p class="text-secondary">Or install via Homebrew:</p>
+                                <p class="text-secondary">Or Download Binary:</p>
                                 <div class="code-block">
                                     <div class="code-block-header">
-                                        <span>bash</span>
+                                        <span>link</span>
                                         <button class="copy-btn" onclick="copyCode(this)">
                                             <i class="fas fa-copy"></i>
                                         </button>
                                     </div>
-                                    <pre><code>brew install nova</code></pre>
+                                    <pre><code>https://github.com/m7moud2/nova-container-system/releases/latest</code></pre>
                                 </div>
                             </div>
                             <div class="tab-pane fade" id="install-linux" role="tabpanel">
@@ -177,7 +177,7 @@
                                             <i class="fas fa-copy"></i>
                                         </button>
                                     </div>
-                                    <pre><code>curl --proto '=https' --tlsv1.2 -sSf https://nova.sh/install | sh</code></pre>
+                                    <pre><code>curl -sSf https://raw.githubusercontent.com/m7moud2/nova-container-system/main/install.sh | sh</code></pre>
                                 </div>
                                 <p class="text-secondary">Or build from source:</p>
                                 <div class="code-block">
@@ -187,15 +187,15 @@
                                             <i class="fas fa-copy"></i>
                                         </button>
                                     </div>
-                                    <pre><code>git clone https://github.com/nova-container/core
-cd core
+                                    <pre><code>git clone https://github.com/m7moud2/nova-container-system.git
+cd nova-container-system
 cargo build --release
-sudo cp target/release/nova /usr/local/bin/</code></pre>
+sudo cp target/release/nova_container_system /usr/local/bin/nova</code></pre>
                                 </div>
                             </div>
                             <div class="tab-pane fade" id="install-windows" role="tabpanel">
                                 <h3 class="mb-4">Install on Windows</h3>
-                                <p class="text-secondary mb-3">Install via WSL2 (recommended):</p>
+                                <p class="text-secondary mb-3">Download the executable:</p>
                                 <div class="code-block mb-4">
                                     <div class="code-block-header">
                                         <span>powershell</span>
@@ -203,9 +203,7 @@ sudo cp target/release/nova /usr/local/bin/</code></pre>
                                             <i class="fas fa-copy"></i>
                                         </button>
                                     </div>
-                                    <pre><code>wsl --install
-wsl
-curl --proto '=https' --tlsv1.2 -sSf https://nova.sh/install | sh</code></pre>
+                                    <pre><code>iwr https://github.com/m7moud2/nova-container-system/releases/latest/download/nova-windows-x86_64.exe -OutFile nova.exe</code></pre>
                                 </div>
                             </div>
                         </div>
