@@ -1,0 +1,33 @@
+{
+  "tag": "myapp:v1.0",
+  "base": "scratch",
+  "env": [
+    [
+      "PORT",
+      "8080"
+    ],
+    [
+      "LOG_LEVEL",
+      "info"
+    ]
+  ],
+  "cmd": [
+    "nova",
+    "run",
+    "/app/hello.wat"
+  ],
+  "expose": [
+    8080
+  ],
+  "workdir": "/app",
+  "labels": [
+    [
+      "version",
+      "1.0"
+    ],
+    [
+      "maintainer",
+      "nova-team"
+    ]
+  ]
+}

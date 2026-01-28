@@ -1,0 +1,22 @@
+# Example Novafile - Web Server
+FROM scratch
+
+# Copy application
+COPY examples/hello.wat /app/hello.wat
+
+# Set environment
+ENV PORT=8080
+ENV LOG_LEVEL=info
+
+# Expose port
+EXPOSE 8080
+
+# Set working directory
+WORKDIR /app
+
+# Label
+LABEL version="1.0"
+LABEL maintainer="nova-team"
+
+# Run command
+CMD ["nova", "run", "/app/hello.wat"]
