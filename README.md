@@ -45,11 +45,19 @@ Nova is a high-performance container runtime built with Rust and WebAssembly, de
 
 ### Installation
 
+**Run the installation script (macOS/Linux):**
 ```bash
-curl --proto '=https' --tlsv1.2 -sSf https://nova.sh/install | sh
+curl -sSf https://raw.githubusercontent.com/m7moud2/nova-container-system/main/install.sh | sh
 ```
 
-Or build from source:
+**Or download manually:**
+
+| Platform | Arch | Link |
+|----------|------|------|
+| **macOS** | Apple Silicon (M1/M2) | [Download](https://github.com/m7moud2/nova-container-system/releases/latest/download/nova-macos-arm64) |
+| **macOS** | Intel (x86_64) | [Download](https://github.com/m7moud2/nova-container-system/releases/latest/download/nova-macos-x86_64) |
+| **Linux** | x86_64 | [Download](https://github.com/m7moud2/nova-container-system/releases/latest/download/nova-linux-x86_64) |
+| **Windows** | x86_64 | [Download](https://github.com/m7moud2/nova-container-system/releases/latest/download/nova-windows-x86_64.exe) |
 
 ```bash
 git clone https://github.com/nova-container/core
