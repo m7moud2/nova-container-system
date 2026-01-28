@@ -29,7 +29,7 @@ echo "📋 Detected: $PLATFORM ($ARCH)"
 echo ""
 
 # GitHub repository (update this with your username)
-GITHUB_USER="YOUR_USERNAME"
+GITHUB_USER="m7moud2"
 REPO="nova-container-system"
 
 # Download URL
