@@ -42,16 +42,21 @@ jobs:
     - name: Build release
       run: cargo build --release --target ${{ matrix.target }}
     
+    - name: Rename binary
+      run: |
+        cp target/${{ matrix.target }}/release/nova_container_system${{ matrix.os == 'windows-latest' && '.exe' || '' }} ${{ matrix.artifact_name }}
+      shell: bash
+
     - name: Upload artifact
       uses: actions/upload-artifact@v3
       with:
         name: ${{ matrix.artifact_name }}
-        path: target/${{ matrix.target }}/release/nova_container_system${{ matrix.os == 'windows-latest' && '.exe' || '' }}
+        path: ${{ matrix.artifact_name }}
 
     - name: Upload to Release
       if: github.event_name == 'release'
       uses: softprops/action-gh-release@v1
       with:
-        files: target/${{ matrix.target }}/release/nova_container_system${{ matrix.os == 'windows-latest' && '.exe' || '' }}
+        files: ${{ matrix.artifact_name }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
