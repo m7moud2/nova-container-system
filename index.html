@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nova - Next-Gen Container Runtime | 1000x Faster than Docker</title>
+    <meta name="description"
+        content="Lightning-fast WebAssembly containers with microsecond startup. Built with Rust for uncompromising performance and security.">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+
+<body>
+    <!-- Particle Background -->
+    <div id="particles-js"></div>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg fixed-top navbar-glass">
+        <div class="container-fluid px-4 px-lg-5">
+            <a class="navbar-brand d-flex align-items-center" href="#">
+                <div class="logo-icon me-2">
+                    <i class="fas fa-cube"></i>
+                </div>
+                <span class="logo-text">Nova</span>
+                <span class="badge bg-success ms-2 pulse-badge">v1.0</span>
+            </a>
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-lg-center">
+                    <li class="nav-item"><a class="nav-link px-3" href="#revolutionary">Revolutionary</a></li>
+                    <li class="nav-item"><a class="nav-link px-3" href="#features">Features</a></li>
+                    <li class="nav-item"><a class="nav-link px-3" href="#performance">Performance</a></li>
+                    <li class="nav-item"><a class="nav-link px-3" href="#pricing">Pricing</a></li>
+                    <li class="nav-item"><a class="nav-link px-3" href="learn.html">Learn</a></li>
+                    <li class="nav-item ms-lg-2">
+                        <a class="btn btn-outline-primary btn-sm rounded-pill px-4"
+                            href="https://github.com/nova-container">
+                            <i class="fab fa-github me-2"></i>Star on GitHub
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section position-relative overflow-hidden">
+        <div class="hero-gradient"></div>
+        <div class="hero-grid"></div>
+        <div class="container position-relative" style="z-index: 10;">
+            <div class="row align-items-center min-vh-100 py-5">
+                <div class="col-lg-6" data-aos="fade-right">
+                    <div class="badge-pill mb-4">
+                        <i class="fas fa-rocket me-2"></i>Open Source • 10+ Unique Features • Free Forever
+                    </div>
+                    <h1 class="hero-title mb-4">
+                        The Revolutionary<br>
+                        <span class="gradient-text typing-effect">Container Platform</span>
+                    </h1>
+                    <p class="hero-subtitle mb-5">
+                        <strong>1000x faster than Docker.</strong> With 10+ revolutionary features that NO other
+                        platform has.
+                        <br>Now with <strong>native Python & Node.js support</strong> - just run your code!
+                    </p>
+                    <div class="d-flex flex-wrap gap-3 mb-5">
+                        <a href="#docs" class="btn btn-primary btn-lg px-5 py-3 btn-glow">
+                            <i class="fas fa-download me-2"></i>Start Free Forever
+                        </a>
+                        <a href="#revolutionary" class="btn btn-outline-light btn-lg px-5 py-3">
+                            <i class="fas fa-star me-2"></i>See Unique Features
+                        </a>
+                    </div>
+                    <div class="stats-row">
+                        <div class="stat-item" data-aos="zoom-in" data-aos-delay="100">
+                            <div class="stat-value counter" data-target="240">0</div>
+                            <div class="stat-label">µs Startup</div>
+                        </div>
+                        <div class="stat-divider"></div>
+                        <div class="stat-item" data-aos="zoom-in" data-aos-delay="200">
+                            <div class="stat-value counter" data-target="10">0</div>
+                            <div class="stat-label">Unique Features</div>
+                        </div>
+                        <div class="stat-divider"></div>
+                        <div class="stat-item" data-aos="zoom-in" data-aos-delay="300">
+                            <div class="stat-value">FREE</div>
+                            <div class="stat-label">Open Source</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 d-none d-lg-block" data-aos="fade-left">
+                    <div class="terminal-demo">
+                        <div class="terminal-header">
+                            <span class="dot dot-red"></span>
+                            <span class="dot dot-yellow"></span>
+                            <span class="dot dot-green"></span>
+                            <span class="terminal-title">nova@terminal ~ </span>
+                        </div>
+                        <div class="terminal-body" id="terminal-output">
+                            <div class="terminal-line"><span class="prompt">$</span> <span class="command">nova run
+                                    app.wasm --replicas 100</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Live Metrics Dashboard -->
+    <section class="metrics-section py-5 bg-dark-gradient">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-md-3" data-aos="fade-up" data-aos-delay="0">
+                    <div class="metric-card">
+                        <div class="metric-icon"><i class="fas fa-rocket"></i></div>
+                        <div class="metric-value"><span class="counter" data-target="10000">0</span>+</div>
+                        <div class="metric-label">Containers Deployed</div>
+                    </div>
+                </div>
+                <div class="col-md-3" data-aos="fade-up" data-aos-delay="100">
+                    <div class="metric-card">
+                        <div class="metric-icon"><i class="fas fa-users"></i></div>
+                        <div class="metric-value"><span class="counter" data-target="500">0</span>+</div>
+                        <div class="metric-label">Active Users</div>
+                    </div>
+                </div>
+                <div class="col-md-3" data-aos="fade-up" data-aos-delay="200">
+                    <div class="metric-card">
+                        <div class="metric-icon"><i class="fas fa-star"></i></div>
+                        <div class="metric-value"><span class="counter" data-target="2500">0</span>+</div>
+                        <div class="metric-label">GitHub Stars</div>
+                    </div>
+                </div>
+                <div class="col-md-3" data-aos="fade-up" data-aos-delay="300">
+                    <div class="metric-card">
+                        <div class="metric-icon"><i class="fas fa-download"></i></div>
+                        <div class="metric-value"><span class="counter" data-target="50">0</span>K+</div>
+                        <div class="metric-label">Downloads</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Revolutionary Features Section -->
+    <section id="revolutionary" class="section-padding">
+        <div class="container">
+            <div class="text-center mb-5 pb-4" data-aos="fade-up">
+                <div class="badge-pill mb-3">
+                    <i class="fas fa-star me-2"></i>Exclusive to Nova
+                </div>
+                <h2 class="section-title mb-3">Revolutionary Features</h2>
+                <p class="section-subtitle">Unique innovations - some working now, more coming soon!</p>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="0">
+                    <div class="revolutionary-card">
+                        <div class="revolutionary-icon">
+                            <i class="fas fa-history"></i>
+                        </div>
+                        <h3 class="revolutionary-title">Time-Travel Debugging</h3>
+                        <p class="revolutionary-desc">Rewind execution to any point in time. Debug like never before.
+                        </p>
+                        <div class="revolutionary-badge bg-warning">Coming Q2 2026</div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="100">
+                    <div class="revolutionary-card">
+                        <div class="revolutionary-icon">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <h3 class="revolutionary-title">AI Auto-Optimization</h3>
+                        <p class="revolutionary-desc">40% cost reduction automatically. AI learns and optimizes your
+                            app.</p>
+                        <div class="revolutionary-badge bg-warning">Coming Q3 2026</div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="200">
+                    <div class="revolutionary-card">
+                        <div class="revolutionary-icon">
+                            <i class="fas fa-atom"></i>
+                        </div>
+                        <h3 class="revolutionary-title">Quantum-Safe Encryption</h3>
+                        <p class="revolutionary-desc">Future-proof security against quantum computers.</p>
+                        <div class="revolutionary-badge bg-warning">Coming Q4 2026</div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="300">
+                    <div class="revolutionary-card">
+                        <div class="revolutionary-icon">
+                            <i class="fas fa-globe-americas"></i>
+                        </div>
+                        <i class="fas fa-heartbeat"></i>
+                    </div>
+                    <h3 class="revolutionary-title">Self-Healing AI</h3>
+                    <a href="#features" class="btn btn-outline-primary">
+                        <i class="fas fa-arrow-down me-2"></i>See More Features
+                    </a>
+                </div>
+            </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="section-padding">
+        <div class="container">
+            <div class="text-center mb-5 pb-4" data-aos="fade-up">
+                <h2 class="section-title mb-3">Built for the Future</h2>
+                <p class="section-subtitle">Enterprise-grade features that set new standards</p>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="0">
+                    <div class="feature-card-pro">
+                        <div class="feature-icon">
+                            <i class="fas fa-bolt"></i>
+                        </div>
+                        <h3 class="feature-title">Lightning Fast</h3>
+                        <p class="feature-desc">
+                            240µs startup for Wasm, ~50ms for Python/Node.js. 1000x faster than Docker.
+                        </p>
+                        <span class="feature-badge">Proven Performance</span>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="100">
+                    <div class="feature-card-pro">
+                        <div class="feature-icon">
+                            <i class="fas fa-code"></i>
+                        </div>
+                        <h3 class="feature-title">Universal Language Support</h3>
+                        <p class="feature-desc">
+                            Python, Node.js, Rust, Go, C/C++ - all working now! Auto-detects frameworks.
+                        </p>
+                        <span class="feature-badge">Just Works ✨</span>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="200">
+                    <div class="feature-card-pro">
+                        <div class="feature-icon">
+                            <i class="fas fa-magic"></i>
+                        </div>
+                        <h3 class="feature-title">Zero Configuration</h3>
+                        <p class="feature-desc">
+                            Just run <code>nova run app.py</code> - no Dockerfile, no config, no hassle.
+                        </p>
+                        <span class="feature-badge">Simple</span>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="300">
+                    <div class="feature-card-pro">
+                        <div class="feature-icon">
+                            <i class="fas fa-layer-group"></i>
+                        </div>
+                        <h3 class="feature-title">Native Orchestration</h3>
+                        <p class="feature-desc">Built-in scheduler handles thousands of concurrent instances with
+                            intelligent load balancing.</p>
+                        <div class="feature-badge">Scalability</div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="400">
+                    <div class="feature-card-pro">
+                        <div class="feature-icon">
+                            <i class="fas fa-network-wired"></i>
+                        </div>
+                        <h3 class="feature-title">Zero-Copy Networking</h3>
+                        <p class="feature-desc">Internal mesh network with memory-mapped channels. No TCP overhead, pure
+                            performance.</p>
+                        <div class="feature-badge">Networking</div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="500">
+                    <div class="feature-card-pro">
+                        <div class="feature-icon">
+                            <i class="fas fa-database"></i>
+                        </div>
+                        <h3 class="feature-title">Persistent Storage</h3>
+                        <p class="feature-desc">Mount host directories with fine-grained permissions. Full WASI
+                            filesystem support.</p>
+                        <div class="feature-badge">Storage</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Performance Comparison -->
+    <section id="performance" class="section-padding bg-dark-gradient">
+        <div class="container">
+            <div class="text-center mb-5 pb-4" data-aos="fade-up">
+                <h2 class="section-title mb-3">Performance That Speaks</h2>
+                <p class="section-subtitle">Real-world benchmarks against industry standards</p>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <div class="comparison-card" data-aos="zoom-in">
+                        <div class="row g-0">
+                            <div class="col-md-4 border-end border-secondary">
+                                <div class="comparison-item">
+                                    <div class="comparison-logo">🐳</div>
+                                    <div class="comparison-label">Docker</div>
+                                    <div class="comparison-bar docker-bar" data-width="100"></div>
+                                    <div class="comparison-value">2.4s</div>
+                                    <div class="comparison-note">Traditional Container</div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 border-end border-secondary">
+                                <div class="comparison-item">
+                                    <div class="comparison-logo">🦭</div>
+                                    <div class="comparison-label">Podman</div>
+                                    <div class="comparison-bar podman-bar" data-width="75"></div>
+                                    <div class="comparison-value">1.8s</div>
+                                    <div class="comparison-note">Rootless Container</div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="comparison-item highlight">
+                                    <div class="comparison-logo">🚀</div>
+                                    <div class="comparison-label">Nova</div>
+                                    <div class="comparison-bar nova-bar" data-width="1"></div>
+                                    <div class="comparison-value text-primary">240µs</div>
+                                    <div class="comparison-note text-success">1000x Faster!</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Playground -->
+    <section id="playground" class="section-padding">
+        <div class="container">
+            <div class="text-center mb-5 pb-4" data-aos="fade-up">
+                <h2 class="section-title mb-3">Try It Live</h2>
+                <p class="section-subtitle">Experience Nova in your browser</p>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <div class="playground-card" data-aos="fade-up">
+                        <div class="row g-0">
+                            <div class="col-lg-6 border-end border-secondary">
+                                <div class="playground-editor">
+                                    <div class="editor-header">
+                                        <span><i class="fas fa-code me-2"></i>example.wat</span>
+                                    </div>
+                                    <textarea class="editor-textarea" id="code-editor">(module
+  (import "wasi_snapshot_preview1" "fd_write" 
+    (func $fd_write (param i32 i32 i32 i32) (result i32)))
+  (memory (export "memory") 1)
+  (data (i32.const 8) "Hello from Nova! 🚀\n")
+  
+  (func $main (export "_start")
+    (i32.store (i32.const 0) (i32.const 8))
+    (i32.store (i32.const 4) (i32.const 22))
+    (call $fd_write
+      (i32.const 1)
+      (i32.const 0)
+      (i32.const 1)
+      (i32.const 20))
+    drop)
+)</textarea>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="playground-output">
+                                    <div class="output-header">
+                                        <span><i class="fas fa-terminal me-2"></i>Output</span>
+                                        <button class="btn btn-sm btn-primary" onclick="runCode()">
+                                            <i class="fas fa-play me-1"></i>Run
+                                        </button>
+                                    </div>
+                                    <div class="output-content" id="playground-output">
+                                        <div class="text-secondary">Click "Run" to execute...</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Documentation -->
+    <section id="docs" class="section-padding bg-dark-gradient">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <div class="docs-card" data-aos="fade-up">
+                        <ul class="nav nav-pills mb-4" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="install-tab" data-bs-toggle="pill"
+                                    data-bs-target="#install" type="button" role="tab" aria-controls="install"
+                                    aria-selected="true">
+                                    <i class="fas fa-download me-2"></i>Installation
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="quickstart-tab" data-bs-toggle="pill"
+                                    data-bs-target="#quickstart" type="button" role="tab" aria-controls="quickstart"
+                                    aria-selected="false">
+                                    <i class="fas fa-rocket me-2"></i>Quick Start
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="advanced-tab" data-bs-toggle="pill"
+                                    data-bs-target="#advanced" type="button" role="tab" aria-controls="advanced"
+                                    aria-selected="false">
+                                    <i class="fas fa-cog me-2"></i>Advanced
+                                </button>
+                            </li>
+                        </ul>
+                        <div class="tab-content" id="pills-tabContent">
+                            <div class="tab-pane fade show active" id="install" role="tabpanel"
+                                aria-labelledby="install-tab" tabindex="0">
+                                <h3 class="mb-4">Installation</h3>
+                                <p class="text-secondary mb-4">One command to install on Linux, macOS, or WSL</p>
+                                <div class="code-block mb-4">
+                                    <div class="code-block-header">
+                                        <span>bash</span>
+                                        <button class="copy-btn" onclick="copyCode(this)">
+                                            <i class="fas fa-copy"></i>
+                                        </button>
+                                    </div>
+                                    <pre><code>curl --proto '=https' --tlsv1.2 -sSf https://nova.sh/install | sh</code></pre>
+                                </div>
+                                <h4 class="mt-5 mb-3">Build from Source</h4>
+                                <div class="code-block">
+                                    <div class="code-block-header">
+                                        <span>bash</span>
+                                        <button class="copy-btn" onclick="copyCode(this)">
+                                            <i class="fas fa-copy"></i>
+                                        </button>
+                                    </div>
+                                    <pre><code>git clone https://github.com/nova-container/core
+cd core
+cargo build --release
+./target/release/nova --version</code></pre>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="quickstart" role="tabpanel" aria-labelledby="quickstart-tab"
+                                tabindex="0">
+                                <h3 class="mb-4">Quick Start</h3>
+                                <div class="code-block mb-4">
+                                    <div class="code-block-header">
+                                        <span>bash</span>
+                                        <button class="copy-btn" onclick="copyCode(this)">
+                                            <i class="fas fa-copy"></i>
+                                        </button>
+                                    </div>
+                                    <pre><code># Run a container
+nova run app.wasm
+
+# Run with replicas
+nova run app.wasm --replicas 10
+
+# With resource limits
+nova run app.wasm --fuel 1000000 --memory 512</code></pre>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="advanced" role="tabpanel" aria-labelledby="advanced-tab"
+                                tabindex="0">
+                                <h3 class="mb-4">Advanced Usage</h3>
+                                <div class="code-block">
+                                    <div class="code-block-header">
+                                        <span>bash</span>
+                                        <button class="copy-btn" onclick="copyCode(this)">
+                                            <i class="fas fa-copy"></i>
+                                        </button>
+                                    </div>
+                                    <pre><code># Mount volumes
+nova run app.wasm --map-dir ./data:/data
+
+# Network between containers
+nova run server.wasm --replicas 2
+
+# Full example
+nova run app.wasm \
+  --replicas 5 \
+  --fuel 10000000 \
+  --memory 1024 \
+  --map-dir ./storage:/app/data</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="section-padding">
+        <div class="container">
+            <div class="text-center mb-5 pb-4" data-aos="fade-up">
+                <h2 class="section-title mb-3">Simple, Transparent Pricing</h2>
+                <p class="section-subtitle">The most generous free tier. The cheapest paid plans.</p>
+            </div>
+            <div class="row g-4 justify-content-center">
+                <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="0">
+                    <div class="pricing-card">
+                        <div class="pricing-header">
+                            <h3>Open Source</h3>
+                            <div class="pricing-price">
+                                <span class="price">FREE</span>
+                                <span class="period">forever</span>
+                            </div>
+                        </div>
+                        <ul class="pricing-features">
+                            <li><i class="fas fa-check"></i> Full source code (MIT)</li>
+                            <li><i class="fas fa-check"></i> Unlimited containers</li>
+                            <li><i class="fas fa-check"></i> All core features</li>
+                            <li><i class="fas fa-check"></i> Self-host anywhere</li>
+                            <li><i class="fas fa-check"></i> Community support</li>
+                        </ul>
+                        <a href="#docs" class="btn btn-outline-primary w-100">Get Started</a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="100">
+                    <div class="pricing-card">
+                        <div class="pricing-header">
+                            <h3>Free Cloud</h3>
+                            <div class="pricing-price">
+                                <span class="price">$0</span>
+                                <span class="period">/month</span>
+                            </div>
+                        </div>
+                        <ul class="pricing-features">
+                            <li><i class="fas fa-check"></i> 1,000 container-hours</li>
+                            <li><i class="fas fa-check"></i> 10GB storage</li>
+                            <li><i class="fas fa-check"></i> 100GB bandwidth</li>
+                            <li><i class="fas fa-check"></i> Email support</li>
+                            <li><i class="fas fa-check"></i> No credit card</li>
+                        </ul>
+                        <a href="#docs" class="btn btn-outline-primary w-100">Start Free</a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="200">
+                    <div class="pricing-card featured">
+                        <div class="pricing-badge">Most Popular</div>
+                        <div class="pricing-header">
+                            <h3>Pro</h3>
+                            <div class="pricing-price">
+                                <span class="price">$9</span>
+                                <span class="period">/month</span>
+                            </div>
+                        </div>
+                        <ul class="pricing-features">
+                            <li><i class="fas fa-check"></i> 10,000 container-hours</li>
+                            <li><i class="fas fa-check"></i> 100GB storage</li>
+                            <li><i class="fas fa-check"></i> 1TB bandwidth</li>
+                            <li><i class="fas fa-check"></i> All revolutionary features</li>
+                            <li><i class="fas fa-check"></i> Priority support</li>
+                        </ul>
+                        <a href="#docs" class="btn btn-primary w-100">Start Trial</a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="300">
+                    <div class="pricing-card">
+                        <div class="pricing-header">
+                            <h3>Enterprise</h3>
+                            <div class="pricing-price">
+                                <span class="price">Custom</span>
+                                <span class="period">pricing</span>
+                            </div>
+                        </div>
+                        <ul class="pricing-features">
+                            <li><i class="fas fa-check"></i> Unlimited everything</li>
+                            <li><i class="fas fa-check"></i> 24/7 phone support</li>
+                            <li><i class="fas fa-check"></i> 99.999% SLA</li>
+                            <li><i class="fas fa-check"></i> Dedicated CSM</li>
+                            <li><i class="fas fa-check"></i> On-premise option</li>
+                        </ul>
+                        <a href="#docs" class="btn btn-outline-primary w-100">Contact Sales</a>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-5">
+                <p class="text-secondary">30-day free trial • No credit card required • 60-day money-back guarantee</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container text-center" data-aos="zoom-in">
+            <h2 class="display-4 fw-bold mb-4">Ready to Experience the Future?</h2>
+            <p class="lead text-secondary mb-5">Join thousands of developers building with Nova</p>
+            <div class="d-flex justify-content-center gap-3">
+                <a href="#docs" class="btn btn-primary btn-lg px-5 py-3 btn-glow">
+                    <i class="fas fa-download me-2"></i>Get Started Now
+                </a>
+                <a href="https://github.com/nova-container" class="btn btn-outline-light btn-lg px-5 py-3">
+                    <i class="fab fa-github me-2"></i>View on GitHub
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4 mb-lg-0">
+                    <div class="footer-brand mb-3">
+                        <i class="fas fa-cube me-2"></i>Nova
+                    </div>
+                    <p class="text-secondary mb-4">Next-generation container runtime built with Rust and WebAssembly.
+                    </p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-github"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-discord"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-8">
+                    <div class="row">
+                        <div class="col-6 col-md-3">
+                            <h6 class="footer-title">Product</h6>
+                            <ul class="footer-links">
+                                <li><a href="#features">Features</a></li>
+                                <li><a href="#performance">Performance</a></li>
+                                <li><a href="#docs">Documentation</a></li>
+                                <li><a href="#playground">Playground</a></li>
+                            </ul>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <h6 class="footer-title">Resources</h6>
+                            <ul class="footer-links">
+                                <li><a href="#">GitHub</a></li>
+                                <li><a href="#">Examples</a></li>
+                                <li><a href="#">Blog</a></li>
+                                <li><a href="#">Changelog</a></li>
+                            </ul>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <h6 class="footer-title">Community</h6>
+                            <ul class="footer-links">
+                                <li><a href="#">Discord</a></li>
+                                <li><a href="#">Twitter</a></li>
+                                <li><a href="#">Forum</a></li>
+                                <li><a href="#">Contribute</a></li>
+                            </ul>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <h6 class="footer-title">Company</h6>
+                            <ul class="footer-links">
+                                <li><a href="#">About</a></li>
+                                <li><a href="#">Careers</a></li>
+                                <li><a href="#">Contact</a></li>
+                                <li><a href="#">Privacy</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p class="mb-0 text-secondary">© 2026 Nova Container Systems. Built with <i
+                        class="fas fa-heart text-danger"></i> using Rust & WebAssembly.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <script src="assets/js/script.js"></script>
+</body>
+
+</html>

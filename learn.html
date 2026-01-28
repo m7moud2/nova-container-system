@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learn Nova - Complete Guide</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/learning.css">
+</head>
+
+<body>
+    <!-- Particle Background -->
+    <div id="particles-js"></div>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg fixed-top navbar-glass">
+        <div class="container-fluid px-4 px-lg-5">
+            <a class="navbar-brand d-flex align-items-center" href="index.html">
+                <div class="logo-icon me-2">
+                    <i class="fas fa-cube"></i>
+                </div>
+                <span class="logo-text">Nova</span>
+                <span class="badge bg-success ms-2 pulse-badge">Learn</span>
+            </a>
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-lg-center">
+                    <li class="nav-item"><a class="nav-link px-3" href="#what-is-nova">What is Nova?</a></li>
+                    <li class="nav-item"><a class="nav-link px-3" href="#installation">Installation</a></li>
+                    <li class="nav-item"><a class="nav-link px-3" href="#quick-start">Quick Start</a></li>
+                    <li class="nav-item"><a class="nav-link px-3" href="#languages">Languages</a></li>
+                    <li class="nav-item"><a class="nav-link px-3" href="#tutorials">Tutorials</a></li>
+                    <li class="nav-item ms-lg-2">
+                        <a class="btn btn-outline-primary btn-sm rounded-pill px-4" href="index.html">
+                            <i class="fas fa-home me-2"></i>Back to Home
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section position-relative overflow-hidden">
+        <div class="hero-gradient"></div>
+        <div class="hero-grid"></div>
+        <div class="container position-relative" style="z-index: 10;">
+            <div class="row align-items-center min-vh-100 py-5">
+                <div class="col-lg-8 mx-auto text-center" data-aos="fade-up">
+                    <div class="badge-pill mb-4">
+                        <i class="fas fa-graduation-cap me-2"></i>Complete Learning Guide
+                    </div>
+                    <h1 class="hero-title mb-4">
+                        Master <span class="gradient-text">Nova</span>
+                    </h1>
+                    <p class="hero-subtitle mb-5">
+                        Everything you need to know about the world's fastest container platform.
+                        From installation to advanced features.
+                    </p>
+                    <div class="d-flex flex-wrap gap-3 justify-content-center">
+                        <a href="#installation" class="btn btn-primary btn-lg px-5 py-3 btn-glow">
+                            <i class="fas fa-download me-2"></i>Install Now
+                        </a>
+                        <a href="#quick-start" class="btn btn-outline-light btn-lg px-5 py-3">
+                            <i class="fas fa-rocket me-2"></i>Quick Start
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- What is Nova Section -->
+    <section id="what-is-nova" class="section-padding bg-dark-gradient">
+        <div class="container">
+            <div class="text-center mb-5 pb-4" data-aos="fade-up">
+                <h2 class="section-title mb-3">What is Nova?</h2>
+                <p class="section-subtitle">Understanding the revolutionary container platform</p>
+            </div>
+            <div class="row g-4">
+                <div class="col-lg-6" data-aos="fade-right">
+                    <div class="feature-card-pro">
+                        <h3 class="mb-4">🚀 The Problem Nova Solves</h3>
+                        <p class="text-secondary mb-3">Traditional containers (Docker, Podman) are:</p>
+                        <ul class="text-secondary">
+                            <li>Slow to start (2-5 seconds)</li>
+                            <li>Heavy on resources (100MB+ overhead)</li>
+                            <li>Complex to configure</li>
+                            <li>Platform-dependent</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-6" data-aos="fade-left">
+                    <div class="feature-card-pro">
+                        <h3 class="mb-4">✨ The Nova Solution</h3>
+                        <p class="text-secondary mb-3">Nova uses WebAssembly to provide:</p>
+                        <ul class="text-secondary">
+                            <li><strong>240µs startup</strong> (1000x faster)</li>
+                            <li><strong>5MB overhead</strong> (20x lighter)</li>
+                            <li><strong>Zero config</strong> (just run your code)</li>
+                            <li><strong>True portability</strong> (any OS, any CPU)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Installation Section -->
+    <section id="installation" class="section-padding">
+        <div class="container">
+            <div class="text-center mb-5 pb-4" data-aos="fade-up">
+                <h2 class="section-title mb-3">Installation</h2>
+                <p class="section-subtitle">Get Nova running in 60 seconds</p>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <div class="docs-card" data-aos="fade-up">
+                        <ul class="nav nav-pills mb-4" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" data-bs-toggle="pill" data-bs-target="#install-mac"
+                                    role="tab">
+                                    <i class="fab fa-apple me-2"></i>macOS
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" data-bs-toggle="pill" data-bs-target="#install-linux"
+                                    role="tab">
+                                    <i class="fab fa-linux me-2"></i>Linux
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" data-bs-toggle="pill" data-bs-target="#install-windows"
+                                    role="tab">
+                                    <i class="fab fa-windows me-2"></i>Windows
+                                </button>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane fade show active" id="install-mac" role="tabpanel">
+                                <h3 class="mb-4">Install on macOS</h3>
+                                <div class="code-block mb-4">
+                                    <div class="code-block-header">
+                                        <span>bash</span>
+                                        <button class="copy-btn" onclick="copyCode(this)">
+                                            <i class="fas fa-copy"></i>
+                                        </button>
+                                    </div>
+                                    <pre><code>curl --proto '=https' --tlsv1.2 -sSf https://nova.sh/install | sh</code></pre>
+                                </div>
+                                <p class="text-secondary">Or install via Homebrew:</p>
+                                <div class="code-block">
+                                    <div class="code-block-header">
+                                        <span>bash</span>
+                                        <button class="copy-btn" onclick="copyCode(this)">
+                                            <i class="fas fa-copy"></i>
+                                        </button>
+                                    </div>
+                                    <pre><code>brew install nova</code></pre>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="install-linux" role="tabpanel">
+                                <h3 class="mb-4">Install on Linux</h3>
+                                <div class="code-block mb-4">
+                                    <div class="code-block-header">
+                                        <span>bash</span>
+                                        <button class="copy-btn" onclick="copyCode(this)">
+                                            <i class="fas fa-copy"></i>
+                                        </button>
+                                    </div>
+                                    <pre><code>curl --proto '=https' --tlsv1.2 -sSf https://nova.sh/install | sh</code></pre>
+                                </div>
+                                <p class="text-secondary">Or build from source:</p>
+                                <div class="code-block">
+                                    <div class="code-block-header">
+                                        <span>bash</span>
+                                        <button class="copy-btn" onclick="copyCode(this)">
+                                            <i class="fas fa-copy"></i>
+                                        </button>
+                                    </div>
+                                    <pre><code>git clone https://github.com/nova-container/core
+cd core
+cargo build --release
+sudo cp target/release/nova /usr/local/bin/</code></pre>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="install-windows" role="tabpanel">
+                                <h3 class="mb-4">Install on Windows</h3>
+                                <p class="text-secondary mb-3">Install via WSL2 (recommended):</p>
+                                <div class="code-block mb-4">
+                                    <div class="code-block-header">
+                                        <span>powershell</span>
+                                        <button class="copy-btn" onclick="copyCode(this)">
+                                            <i class="fas fa-copy"></i>
+                                        </button>
+                                    </div>
+                                    <pre><code>wsl --install
+wsl
+curl --proto '=https' --tlsv1.2 -sSf https://nova.sh/install | sh</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Start Section -->
+    <section id="quick-start" class="section-padding bg-dark-gradient">
+        <div class="container">
+            <div class="text-center mb-5 pb-4" data-aos="fade-up">
+                <h2 class="section-title mb-3">Quick Start</h2>
+                <p class="section-subtitle">Your first Nova container in 3 commands</p>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <div class="timeline">
+                        <div class="timeline-item" data-aos="fade-up" data-aos-delay="0">
+                            <div class="timeline-number">1</div>
+                            <div class="timeline-content">
+                                <h4>Create Your App</h4>
+                                <div class="code-block">
+                                    <div class="code-block-header">
+                                        <span>python</span>
+                                        <button class="copy-btn" onclick="copyCode(this)">
+                                            <i class="fas fa-copy"></i>
+                                        </button>
+                                    </div>
+                                    <pre><code>echo 'print("Hello from Nova!")' > app.py</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="timeline-item" data-aos="fade-up" data-aos-delay="100">
+                            <div class="timeline-number">2</div>
+                            <div class="timeline-content">
+                                <h4>Run with Nova</h4>
+                                <div class="code-block">
+                                    <div class="code-block-header">
+                                        <span>bash</span>
+                                        <button class="copy-btn" onclick="copyCode(this)">
+                                            <i class="fas fa-copy"></i>
+                                        </button>
+                                    </div>
+                                    <pre><code>nova run app.py</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="timeline-item" data-aos="fade-up" data-aos-delay="200">
+                            <div class="timeline-number">3</div>
+                            <div class="timeline-content">
+                                <h4>That's It! 🎉</h4>
+                                <p class="text-secondary">Nova automatically detected Python and ran your app in 240µs!
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Languages Section -->
+    <section id="languages" class="section-padding">
+        <div class="container">
+            <div class="text-center mb-5 pb-4" data-aos="fade-up">
+                <h2 class="section-title mb-3">Supported Languages</h2>
+                <p class="section-subtitle">Nova works with all major programming languages</p>
+            </div>
+            <div class="row g-4">
+                <!-- Python -->
+                <div class="col-lg-6" data-aos="fade-up" data-aos-delay="0">
+                    <div class="language-card">
+                        <div class="language-header">
+                            <i class="fab fa-python"></i>
+                            <h3>Python</h3>
+                            <span class="badge bg-success">✅ Working Now</span>
+                        </div>
+                        <p class="text-secondary mb-3">Run Python apps with Django, Flask, FastAPI - auto-detected!</p>
+                        <div class="code-block">
+                            <div class="code-block-header">
+                                <span>bash</span>
+                            </div>
+                            <pre><code># Just run your Python app!
+nova run app.py
+
+# Django (auto-detected)
+nova run manage.py runserver
+
+# Flask (auto-detected)
+nova run app.py</code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Node.js -->
+                <div class="col-lg-6" data-aos="fade-up" data-aos-delay="100">
+                    <div class="language-card">
+                        <div class="language-header">
+                            <i class="fab fa-node-js"></i>
+                            <h3>Node.js</h3>
+                            <span class="badge bg-success">✅ Working Now</span>
+                        </div>
+                        <p class="text-secondary mb-3">Run JavaScript/TypeScript with Express, Next.js - auto-detected!
+                        </p>
+                        <div class="code-block">
+                            <div class="code-block-header">
+                                <span>bash</span>
+                            </div>
+                            <pre><code># Run Node.js app
+nova run server.js
+
+# With Express
+nova run app.js
+
+# With Next.js
+nova run . --framework nextjs</code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- React -->
+                <div class="col-lg-6" data-aos="fade-up" data-aos-delay="200">
+                    <div class="language-card">
+                        <div class="language-header">
+                            <i class="fab fa-react"></i>
+                            <h3>React</h3>
+                            <span class="badge bg-success">Ready</span>
+                        </div>
+                        <p class="text-secondary mb-3">Deploy React apps instantly</p>
+                        <div class="code-block">
+                            <div class="code-block-header">
+                                <span>bash</span>
+                            </div>
+                            <pre><code># Auto-detect and run
+nova run .
+
+# Build and deploy
+nova build -t myapp:latest
+nova deploy myapp:latest --global</code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Vue.js -->
+                <div class="col-lg-6" data-aos="fade-up" data-aos-delay="300">
+                    <div class="language-card">
+                        <div class="language-header">
+                            <i class="fab fa-vuejs"></i>
+                            <h3>Vue.js</h3>
+                            <span class="badge bg-success">Ready</span>
+                        </div>
+                        <p class="text-secondary mb-3">Deploy Vue.js applications</p>
+                        <div class="code-block">
+                            <div class="code-block-header">
+                                <span>bash</span>
+                            </div>
+                            <pre><code># Run Vue app
+nova run .
+
+# With Vite
+nova run . --framework vue</code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PHP & Laravel -->
+                <div class="col-lg-6" data-aos="fade-up" data-aos-delay="400">
+                    <div class="language-card">
+                        <div class="language-header">
+                            <i class="fab fa-php"></i>
+                            <h3>PHP & Laravel</h3>
+                            <span class="badge bg-success">Ready</span>
+                        </div>
+                        <p class="text-secondary mb-3">Run PHP and Laravel applications</p>
+                        <div class="code-block">
+                            <div class="code-block-header">
+                                <span>bash</span>
+                            </div>
+                            <pre><code># Run PHP
+nova run index.php
+
+# Laravel (auto-detected)
+nova run . --framework laravel
+php artisan serve</code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- HTML/CSS/JS -->
+                <div class="col-lg-6" data-aos="fade-up" data-aos-delay="500">
+                    <div class="language-card">
+                        <div class="language-header">
+                            <i class="fab fa-html5"></i>
+                            <h3>HTML/CSS/JS</h3>
+                            <span class="badge bg-success">Ready</span>
+                        </div>
+                        <p class="text-secondary mb-3">Serve static websites instantly</p>
+                        <div class="code-block">
+                            <div class="code-block-header">
+                                <span>bash</span>
+                            </div>
+                            <pre><code># Serve static files
+nova serve ./dist --port 8080
+
+# Or just
+nova run .</code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Rust -->
+                <div class="col-lg-6" data-aos="fade-up" data-aos-delay="600">
+                    <div class="language-card">
+                        <div class="language-header">
+                            <i class="fas fa-cog"></i>
+                            <h3>Rust</h3>
+                            <span class="badge bg-primary">Native</span>
+                        </div>
+                        <p class="text-secondary mb-3">Native WebAssembly compilation</p>
+                        <div class="code-block">
+                            <div class="code-block-header">
+                                <span>bash</span>
+                            </div>
+                            <pre><code># Compile to Wasm
+rustc --target wasm32-wasi app.rs
+
+# Run
+nova run app.wasm</code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Go -->
+                <div class="col-lg-6" data-aos="fade-up" data-aos-delay="700">
+                    <div class="language-card">
+                        <div class="language-header">
+                            <i class="fas fa-code"></i>
+                            <h3>Go</h3>
+                            <span class="badge bg-primary">Native</span>
+                        </div>
+                        <p class="text-secondary mb-3">Via TinyGo compiler</p>
+                        <div class="code-block">
+                            <div class="code-block-header">
+                                <span>bash</span>
+                            </div>
+                            <pre><code># Compile with TinyGo
+tinygo build -o app.wasm -target=wasi app.go
+
+# Run
+nova run app.wasm</code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Flutter & Dart -->
+                <div class="col-lg-6" data-aos="fade-up" data-aos-delay="800">
+                    <div class="language-card">
+                        <div class="language-header">
+                            <i class="fas fa-mobile-alt"></i>
+                            <h3>Flutter & Dart</h3>
+                            <span class="badge bg-warning">Coming Soon</span>
+                        </div>
+                        <p class="text-secondary mb-3">Deploy Flutter web apps</p>
+                        <div class="code-block">
+                            <div class="code-block-header">
+                                <span>bash</span>
+                            </div>
+                            <pre><code># Build Flutter web
+flutter build web
+
+# Deploy with Nova
+nova run build/web --framework flutter</code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Swift -->
+                <div class="col-lg-6" data-aos="fade-up" data-aos-delay="900">
+                    <div class="language-card">
+                        <div class="language-header">
+                            <i class="fab fa-swift"></i>
+                            <h3>Swift</h3>
+                            <span class="badge bg-warning">Coming Soon</span>
+                        </div>
+                        <p class="text-secondary mb-3">SwiftWasm support</p>
+                        <div class="code-block">
+                            <div class="code-block-header">
+                                <span>bash</span>
+                            </div>
+                            <pre><code># Compile with SwiftWasm
+swiftc -target wasm32-unknown-wasi app.swift
+
+# Run
+nova run app.wasm</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Operating Systems Support -->
+            <div class="text-center mt-5 pt-5" data-aos="fade-up">
+                <h3 class="mb-4">Supported Operating Systems</h3>
+                <div class="row g-3 justify-content-center">
+                    <div class="col-auto">
+                        <div class="os-badge">
+                            <i class="fab fa-apple"></i>
+                            <span>macOS</span>
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <div class="os-badge">
+                            <i class="fab fa-ubuntu"></i>
+                            <span>Ubuntu</span>
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <div class="os-badge">
+                            <i class="fab fa-debian"></i>
+                            <span>Debian</span>
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <div class="os-badge">
+                            <i class="fab fa-centos"></i>
+                            <span>CentOS</span>
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <div class="os-badge">
+                            <i class="fab fa-linux"></i>
+                            <span>Alpine Linux</span>
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <div class="os-badge">
+                            <i class="fab fa-windows"></i>
+                            <span>Windows (WSL2)</span>
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <div class="os-badge">
+                            <i class="fab fa-aws"></i>
+                            <span>AWS</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tutorials Section -->
+    <section id="tutorials" class="section-padding bg-dark-gradient">
+        <div class="container">
+            <div class="text-center mb-5 pb-4" data-aos="fade-up">
+                <h2 class="section-title mb-3">Step-by-Step Tutorials</h2>
+                <p class="section-subtitle">Learn by doing</p>
+            </div>
+            <div class="row g-4">
+                <div class="col-lg-4" data-aos="fade-up" data-aos-delay="0">
+                    <div class="tutorial-card">
+                        <div class="tutorial-icon">
+                            <i class="fas fa-flask"></i>
+                        </div>
+                        <h4>Build a Flask API</h4>
+                        <p class="text-secondary">Create a REST API with Python Flask and deploy with Nova</p>
+                        <a href="#" class="btn btn-outline-primary w-100">Start Tutorial</a>
+                    </div>
+                </div>
+                <div class="col-lg-4" data-aos="fade-up" data-aos-delay="100">
+                    <div class="tutorial-card">
+                        <div class="tutorial-icon">
+                            <i class="fab fa-react"></i>
+                        </div>
+                        <h4>Deploy Next.js App</h4>
+                        <p class="text-secondary">Build and deploy a Next.js application with Nova</p>
+                        <a href="#" class="btn btn-outline-primary w-100">Start Tutorial</a>
+                    </div>
+                </div>
+                <div class="col-lg-4" data-aos="fade-up" data-aos-delay="200">
+                    <div class="tutorial-card">
+                        <div class="tutorial-icon">
+                            <i class="fas fa-database"></i>
+                        </div>
+                        <h4>Microservices Architecture</h4>
+                        <p class="text-secondary">Build a complete microservices system with Nova</p>
+                        <a href="#" class="btn btn-outline-primary w-100">Start Tutorial</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container text-center" data-aos="zoom-in">
+            <h2 class="display-4 fw-bold mb-4">Ready to Get Started?</h2>
+            <p class="lead text-secondary mb-5">Install Nova and start building in minutes</p>
+            <div class="d-flex justify-content-center gap-3">
+                <a href="#installation" class="btn btn-primary btn-lg px-5 py-3 btn-glow">
+                    <i class="fas fa-download me-2"></i>Install Nova
+                </a>
+                <a href="index.html" class="btn btn-outline-light btn-lg px-5 py-3">
+                    <i class="fas fa-home me-2"></i>Back to Home
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="text-center">
+                <p class="mb-0 text-secondary">© 2026 Nova Container Systems. Built with <i
+                        class="fas fa-heart text-danger"></i> using Rust & WebAssembly.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <script src="assets/js/script.js"></script>
+</body>
+
+</html>

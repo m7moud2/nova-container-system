@@ -1,0 +1,166 @@
+/* Add to end of style.css */
+
+/* Learning Page Styles */
+.timeline {
+    position: relative;
+    padding: 2rem 0;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    left: 30px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(180deg, var(--primary), var(--secondary));
+}
+
+.timeline-item {
+    position: relative;
+    padding-left: 80px;
+    margin-bottom: 3rem;
+}
+
+.timeline-number {
+    position: absolute;
+    left: 0;
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: white;
+    box-shadow: 0 10px 30px rgba(6, 182, 212, 0.3);
+}
+
+.timeline-content {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    padding: 2rem;
+}
+
+.timeline-content h4 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.language-card {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 2rem;
+    height: 100%;
+    transition: all 0.3s;
+}
+
+.language-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--primary);
+    box-shadow: 0 10px 30px rgba(6, 182, 212, 0.2);
+}
+
+.language-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.language-header i {
+    font-size: 2.5rem;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.language-header h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0;
+    flex: 1;
+}
+
+.tutorial-card {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 2.5rem 2rem;
+    text-align: center;
+    height: 100%;
+    transition: all 0.3s;
+}
+
+.tutorial-card:hover {
+    transform: translateY(-8px);
+    border-color: var(--primary);
+    box-shadow: 0 20px 60px rgba(6, 182, 212, 0.2);
+}
+
+.tutorial-icon {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 36px;
+    margin: 0 auto 1.5rem;
+    box-shadow: 0 10px 30px rgba(6, 182, 212, 0.3);
+}
+
+.tutorial-card h4 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+/* OS Badges */
+.os-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 50px;
+    transition: all 0.3s;
+}
+
+.os-badge:hover {
+    background: rgba(6, 182, 212, 0.1);
+    border-color: var(--primary);
+    transform: translateY(-3px);
+}
+
+.os-badge i {
+    font-size: 1.5rem;
+    color: var(--primary);
+}
+
+.os-badge span {
+    font-weight: 600;
+}
+
+@media (max-width: 768px) {
+    .timeline::before {
+        left: 15px;
+    }
+
+    .timeline-item {
+        padding-left: 60px;
+    }
+
+    .timeline-number {
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
+    }
+}
