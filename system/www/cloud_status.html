@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nova Cloud - Global Edge Status</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="dashboard-shared.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .map-container {
+            position: relative;
+            width: 100%;
+            height: 400px;
+            background: var(--bg-dark);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+
+        .map-bg {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(circle at 50% 50%, rgba(59, 130, 246, 0.1) 0%, transparent 60%);
+            z-index: 1;
+        }
+
+        .node {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: var(--success);
+            border-radius: 50%;
+            z-index: 2;
+            cursor: pointer;
+            box-shadow: 0 0 10px var(--success), 0 0 20px rgba(16, 185, 129, 0.4);
+            animation: pulse 2s infinite;
+        }
+
+        .node.warning {
+            background: var(--warning);
+            box-shadow: 0 0 10px var(--warning), 0 0 20px rgba(245, 158, 11, 0.4);
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            50% {
+                transform: scale(1.5);
+                opacity: 0.5;
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .node-info {
+            position: absolute;
+            background: rgba(15, 23, 42, 0.9);
+            border: 1px solid var(--border);
+            padding: 10px 15px;
+            border-radius: 8px;
+            bottom: 25px;
+            left: -50px;
+            width: 120px;
+            text-align: center;
+            visibility: hidden;
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 3;
+            backdrop-filter: blur(4px);
+        }
+
+        .node:hover .node-info {
+            visibility: visible;
+            opacity: 1;
+            bottom: 20px;
+        }
+
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1px));
+            gap: 1.5rem;
+        }
+
+        .region-card {
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: transform 0.2s ease, border-color 0.2s;
+        }
+
+        .region-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--primary);
+        }
+
+        .region-info h3 {
+            margin: 0 0 0.5rem 0;
+            font-size: 1.1rem;
+        }
+
+        .region-info p {
+            margin: 0;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            font-family: var(--font-mono);
+        }
+
+        .status-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .status-badge.warning {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <i class="fas fa-cube text-primary"></i> <span>Nova</span> Cloud
+            </div>
+            <nav class="sidebar-nav">
+                <a href="dashboard.html"><i class="fas fa-home"></i> Overview</a>
+                <a href="deployments.html"><i class="fas fa-server"></i> Deployments</a>
+                <a href="cloud_status.html" class="active"><i class="fas fa-globe"></i> Edge Network</a>
+                <a href="billing.html"><i class="fas fa-credit-card"></i> Billing</a>
+                <a href="settings.html"><i class="fas fa-cog"></i> Settings</a>
+            </nav>
+            <div style="margin-top: auto; padding-top: 2rem; border-top: 1px solid var(--border);">
+                <div class="user-info" id="userProfile" style="display: flex; align-items: center; gap: 10px;">
+                    <img src="" alt="User" id="sidebarAvatar" style="width: 32px; height: 32px; border-radius: 50%;">
+                    <div>
+                        <div class="name" style="font-weight: 500; font-size: 0.9rem;">Loading...</div>
+                        <div class="role" style="font-size: 0.75rem; color: var(--text-muted);">Pro Plan</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="header">
+                <div>
+                    <h1 class="page-title">Global Edge Network</h1>
+                    <p class="text-muted" style="margin: 0.5rem 0 0 0; font-size: 0.9rem;">Real-time status of Nova's
+                        distributed infrastructure.</p>
+                </div>
+                <div class="header-actions">
+                    <button class="btn-outline" onclick="window.location.reload()"><i class="fas fa-sync"></i> Refresh
+                        Status</button>
+                    <a href="dashboard.html" class="btn-primary">Back to Dashboard</a>
+                </div>
+            </header>
+
+            <div class="map-container">
+                <div class="map-bg"></div>
+                <!-- Mock Map Nodes -->
+                <!-- US East -->
+                <div class="node" style="top: 35%; left: 25%;">
+                    <div class="node-info">
+                        <strong>us-east-1</strong>
+                        <div style="font-size: 0.75rem; color: var(--success); margin-top: 4px;">Operational</div>
+                        <div style="font-size: 0.7rem; color: var(--text-muted); margin-top: 2px;">Latency: 12ms</div>
+                    </div>
+                </div>
+                <!-- US West -->
+                <div class="node" style="top: 40%; left: 15%;">
+                    <div class="node-info">
+                        <strong>us-west-1</strong>
+                        <div style="font-size: 0.75rem; color: var(--success); margin-top: 4px;">Operational</div>
+                        <div style="font-size: 0.7rem; color: var(--text-muted); margin-top: 2px;">Latency: 18ms</div>
+                    </div>
+                </div>
+                <!-- Europe -->
+                <div class="node" style="top: 30%; left: 50%;">
+                    <div class="node-info">
+                        <strong>eu-central-1</strong>
+                        <div style="font-size: 0.75rem; color: var(--success); margin-top: 4px;">Operational</div>
+                        <div style="font-size: 0.7rem; color: var(--text-muted); margin-top: 2px;">Latency: 8ms</div>
+                    </div>
+                </div>
+                <!-- Asia -->
+                <div class="node" style="top: 45%; left: 75%;">
+                    <div class="node-info">
+                        <strong>ap-northeast-1</strong>
+                        <div style="font-size: 0.75rem; color: var(--success); margin-top: 4px;">Operational</div>
+                        <div style="font-size: 0.7rem; color: var(--text-muted); margin-top: 2px;">Latency: 22ms</div>
+                    </div>
+                </div>
+                <!-- South America -->
+                <div class="node warning" style="top: 65%; left: 30%;">
+                    <div class="node-info">
+                        <strong>sa-east-1</strong>
+                        <div style="font-size: 0.75rem; color: var(--warning); margin-top: 4px;">Degraded</div>
+                        <div style="font-size: 0.7rem; color: var(--text-muted); margin-top: 2px;">Latency: 145ms</div>
+                    </div>
+                </div>
+            </div>
+
+            <h2 style="font-size: 1.25rem; margin: 0 0 1.5rem 0;">Region Status</h2>
+            <div class="status-grid">
+                <div class="region-card">
+                    <div class="region-info">
+                        <h3>North America East</h3>
+                        <p>us-east-1 • N. Virginia</p>
+                    </div>
+                    <div class="status-badge">
+                        <i class="fas fa-check-circle"></i> Healthy
+                    </div>
+                </div>
+
+                <div class="region-card">
+                    <div class="region-info">
+                        <h3>North America West</h3>
+                        <p>us-west-1 • N. California</p>
+                    </div>
+                    <div class="status-badge">
+                        <i class="fas fa-check-circle"></i> Healthy
+                    </div>
+                </div>
+
+                <div class="region-card">
+                    <div class="region-info">
+                        <h3>Europe Central</h3>
+                        <p>eu-central-1 • Frankfurt</p>
+                    </div>
+                    <div class="status-badge">
+                        <i class="fas fa-check-circle"></i> Healthy
+                    </div>
+                </div>
+
+                <div class="region-card">
+                    <div class="region-info">
+                        <h3>Asia Pacific</h3>
+                        <p>ap-northeast-1 • Tokyo</p>
+                    </div>
+                    <div class="status-badge">
+                        <i class="fas fa-check-circle"></i> Healthy
+                    </div>
+                </div>
+
+                <div class="region-card">
+                    <div class="region-info">
+                        <h3>South America</h3>
+                        <p>sa-east-1 • São Paulo</p>
+                    </div>
+                    <div class="status-badge warning">
+                        <i class="fas fa-exclamation-triangle"></i> Routing Issues
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Reusing existing script for auth checks -->
+    <script src="/js/dashboard.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learn Nova - Complete Guide</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="dashboard-shared.css">
+    <link rel="stylesheet" href="dashboard.css">
+    <style>
+        /* Modern Docs Layout for inside the dashboard */
+        .main-content {
+            padding: 0;
+            max-width: none;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .top-bar {
+            padding: 1.5rem 2.5rem;
+            border-bottom: 1px solid var(--border);
+            flex-shrink: 0;
+        }
+
+        .docs-layout {
+            display: flex;
+            flex-grow: 1;
+            overflow: hidden;
+        }
+
+        /* Inner Sidebar (for documentation chapters) */
+        .docs-nav {
+            width: 260px;
+            flex-shrink: 0;
+            padding: 2rem 1rem 2rem 2.5rem;
+            border-right: 1px solid var(--border);
+            overflow-y: auto;
+            background: rgba(15, 23, 42, 0.3);
+        }
+
+        .docs-nav-group {
+            margin-bottom: 2rem;
+        }
+
+        .docs-nav-group h4 {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+            padding-left: 1rem;
+            font-weight: 600;
+        }
+
+        .docs-nav-link {
+            display: block;
+            padding: 0.5rem 1rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.95rem;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            margin-bottom: 0.25rem;
+        }
+
+        .docs-nav-link:hover {
+            color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .docs-nav-link.active {
+            color: var(--accent);
+            background: rgba(59, 130, 246, 0.1);
+            font-weight: 500;
+        }
+
+        /* Prose Content (Middle) */
+        .docs-content-wrapper {
+            flex-grow: 1;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .docs-content {
+            padding: 3rem 4rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .docs-content h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            letter-spacing: -1px;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #ffffff 0%, #94a3b8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .docs-content>p.lead {
+            font-size: 1.25rem;
+            line-height: 1.7;
+            color: var(--text-secondary);
+            margin-bottom: 3rem;
+        }
+
+        .docs-content h2 {
+            font-size: 1.8rem;
+            color: var(--text-primary);
+            margin: 3.5rem 0 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .docs-content h3 {
+            font-size: 1.4rem;
+            color: var(--text-primary);
+            margin: 2rem 0 1rem;
+        }
+
+        .docs-content p {
+            font-size: 1.05rem;
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+            color: var(--text-secondary);
+        }
+
+        .docs-content ul {
+            font-size: 1.05rem;
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+            padding-left: 1.5rem;
+            color: var(--text-secondary);
+        }
+
+        .docs-content li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Premium Components */
+        .callout {
+            background: rgba(30, 41, 59, 0.5);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-left: 4px solid var(--accent);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin: 2rem 0;
+            display: flex;
+            gap: 1rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .callout-icon {
+            font-size: 1.25rem;
+            color: var(--accent);
+            margin-top: 2px;
+        }
+
+        .callout-content p {
+            margin: 0;
+            color: var(--text-primary);
+            font-size: 1rem;
+        }
+
+        .code-block {
+            background: #0d1117;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            margin: 2rem 0;
+            overflow: hidden;
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+        }
+
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 1.25rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .code-lang {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .code-copy {
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: color 0.2s;
+        }
+
+        .code-copy:hover {
+            color: var(--text-primary);
+        }
+
+        .code-content {
+            padding: 1.5rem;
+            overflow-x: auto;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: var(--text-primary);
+        }
+
+        .token.comment {
+            color: #64748b;
+        }
+
+        .token.prompt {
+            color: #e06c75;
+            user-select: none;
+            margin-right: 8px;
+        }
+
+        .step {
+            display: flex;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .step::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 40px;
+            bottom: -20px;
+            width: 2px;
+            background: rgba(255, 255, 255, 0.05);
+            z-index: 0;
+        }
+
+        .step:last-child::before {
+            display: none;
+        }
+
+        .step-number {
+            width: 32px;
+            height: 32px;
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            color: var(--accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+            margin-right: 1.5rem;
+            position: relative;
+            z-index: 1;
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.2);
+        }
+
+        .step-content {
+            flex-grow: 1;
+            padding-top: 4px;
+        }
+
+        .step-content h3 {
+            margin-top: 0;
+            color: var(--text-primary);
+        }
+
+        /* On this page TOC (Right) */
+        .docs-toc {
+            width: 200px;
+            flex-shrink: 0;
+            padding: 3rem 2.5rem 2rem 1rem;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+            display: block;
+        }
+
+        .toc-title {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .toc-link {
+            display: block;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.85rem;
+            margin-bottom: 0.5rem;
+            padding-left: 1rem;
+            border-left: 1px solid var(--border);
+            transition: all 0.2s;
+        }
+
+        .toc-link:hover {
+            color: var(--text-primary);
+            border-left-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .toc-link.active {
+            color: var(--accent);
+            border-left-color: var(--accent);
+        }
+
+        @media (max-width: 1200px) {
+            .docs-toc {
+                display: none;
+            }
+        }
+
+        @media (max-width: 900px) {
+            .docs-nav {
+                display: none;
+            }
+
+            .docs-content {
+                padding: 2rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <i class="fas fa-rocket"></i> NOVA CLOUD
+            </div>
+            <nav class="sidebar-nav">
+                <a href="dashboard.html"><i class="fas fa-grid-2"></i> Overview</a>
+                <a href="deployments.html"><i class="fas fa-boxes-stacked"></i> Deployments</a>
+                <a href="cloud_status.html"><i class="fas fa-globe"></i> Edge Network</a>
+                <a href="billing.html"><i class="fas fa-wallet"></i> Billing</a>
+                <a href="settings.html"><i class="fas fa-sliders"></i> Settings</a>
+                <a href="learn.html" class="active"><i class="fas fa-book"></i> Docs</a>
+            </nav>
+            <div class="user-profile" id="userProfile" style="cursor: pointer;">
+                <img src="" alt="User" id="sidebarAvatar">
+                <div class="user-info">
+                    <span class="name">Loading...</span>
+                    <span class="plan">Pro Plan</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="top-bar">
+                <h1>Documentation Reference</h1>
+            </header>
+
+            <div class="docs-layout">
+                <!-- Inner Docs Sidebar -->
+                <aside class="docs-nav">
+                    <div class="docs-nav-group">
+                        <h4>Getting Started</h4>
+                        <a href="#introduction" class="docs-nav-link active">Introduction</a>
+                        <a href="#quickstart" class="docs-nav-link">Deploying Projects</a>
+                        <a href="#billing" class="docs-nav-link">Billing Phase 2</a>
+                    </div>
+                    <div class="docs-nav-group">
+                        <h4>Platform Guides</h4>
+                        <a href="#monitoring" class="docs-nav-link">Monitoring & Logs</a>
+                        <a href="#env" class="docs-nav-link">Environment Variables</a>
+                        <a href="#cli" class="docs-nav-link">Remote CLI Access</a>
+                    </div>
+                </aside>
+
+                <!-- Scrollable center content -->
+                <div class="docs-content-wrapper" id="scrollArea">
+                    <div class="docs-content">
+                        <h1 id="introduction">Nova Dashboard Docs</h1>
+                        <p class="lead">Welcome to the Nova enterprise documentation. From here you can learn how to
+                            manage your high-performance serverless deployments directly through the Dashboard UI.</p>
+
+                        <div class="callout">
+                            <div class="callout-icon"><i class="fas fa-check-circle"></i></div>
+                            <div class="callout-content">
+                                <p><strong>Tip:</strong> Everything you can do in this dashboard can also be automated
+                                    via our REST API using standard bearer token authentication.</p>
+                            </div>
+                        </div>
+
+                        <h2 id="quickstart">Phase 1: Deploying your First Project</h2>
+                        <p>Nova is designed to be completely zero-config. Whether you build Locally or Connect via
+                            GitHub, deployment is handled under the hood automatically.</p>
+
+                        <div class="step">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                <h3>Create Project</h3>
+                                <p>In the <strong>Deployments</strong> tab, select "New Deployment". Choose a pre-built
+                                    template (like Next.js or Python Flask) or point Nova to your GitHub repository.</p>
+                            </div>
+                        </div>
+
+                        <div class="step">
+                            <div class="step-number">2</div>
+                            <div class="step-content">
+                                <h3>Engine Scanner</h3>
+                                <p>Once selected, Nova's <strong>Intelligent Runtime Scanner</strong> will determine
+                                    exactly what compilation steps your app needs and build a minimal Wasm binary
+                                    representing your codebase.</p>
+                            </div>
+                        </div>
+
+                        <div class="step">
+                            <div class="step-number">3</div>
+                            <div class="step-content">
+                                <h3>Edge Propagation</h3>
+                                <p>In milliseconds, your newly generated WebAssembly binary is pushed out to 42 Edge
+                                    locations and is instantly globally available on a secure
+                                    <code>https://your-project.nova.cloud</code> domain.
+                                </p>
+                            </div>
+                        </div>
+
+                        <h2 id="billing">Phase 2: Understand Billing</h2>
+                        <p>Nova Cloud uses a strict pay-as-you-go model. You never pay for idle resources because Nova
+                            scales down to ZERO instantly.</p>
+
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 2rem;">
+                            <div
+                                style="background: rgba(30,41,59,0.5); padding: 1.5rem; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05);">
+                                <h4 style="margin-bottom: 0.5rem; color: #f8fafc;">Compute Usage</h4>
+                                <p style="margin: 0; font-size: 0.95rem;"><strong>$0.005</strong> per CPU hour.<br>Since
+                                    execution is rapid (ms), your cost drops drastically compared to EC2 instances.</p>
+                            </div>
+                            <div
+                                style="background: rgba(30,41,59,0.5); padding: 1.5rem; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05);">
+                                <h4 style="margin-bottom: 0.5rem; color: #f8fafc;">Egress Bandwidth</h4>
+                                <p style="margin: 0; font-size: 0.95rem;"><strong>$0.01</strong> per GB.<br>The first
+                                    50GB of outbound data transfer per month is completely free.</p>
+                            </div>
+                        </div>
+
+                        <h2 id="monitoring">Phase 3: Control & Monitoring</h2>
+                        <p>Managing deployments in Production shouldn't be stressful. Your Project details page offers
+                            immediate control.</p>
+
+                        <ul>
+                            <li><strong>Soft Restart:</strong> Restarting your container takes < 1ms, resulting in zero
+                                    visible downtime to your users.</li>
+                            <li><strong>Live Analytics:</strong> View your response times, memory peaks, and active
+                                requests rendered smoothly with Chart.js based metric aggregation.</li>
+                            <li><strong>Streaming Logs:</strong> View STDOUT and STDERR from your application securely
+                                streamed via WebSockets to your browser in real time.</li>
+                        </ul>
+
+                        <h2 id="cli">Terminal & CLI Access</h2>
+                        <p>Use our CLI for robust local-to-cloud workflows.</p>
+
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span class="code-lang">CLI Reference</span>
+                                <button class="code-copy"><i class="far fa-copy"></i> Copy</button>
+                            </div>
+                            <div class="code-content">
+                                <span class="token prompt">$</span> nova login
+                                <span class="token prompt">$</span> nova deploy ./frontend --name api-gateway
+                                <span class="token prompt">$</span> nova logs api-gateway --tail
+                            </div>
+                        </div>
+
+                        <br><br><br> <!-- Space for bottom scrolling -->
+                    </div>
+                </div>
+
+                <!-- Right TOC -->
+                <aside class="docs-toc">
+                    <div class="toc-title">On this page</div>
+                    <a href="#introduction" class="toc-link active">Introduction</a>
+                    <a href="#quickstart" class="toc-link">Deploying Projects</a>
+                    <a href="#billing" class="toc-link">Understanding Billing</a>
+                    <a href="#monitoring" class="toc-link">Control & Monitoring</a>
+                    <a href="#cli" class="toc-link">Terminal Access</a>
+                </aside>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/dashboard.js"></script>
+    <script>
+        // Smooth scrolling & active state for TOC inside Dashboard scrollable area
+        const observeSections = () => {
+            const scrollArea = document.getElementById('scrollArea');
+            const sections = document.querySelectorAll('h2, h1');
+            const navLinks = document.querySelectorAll('.toc-link');
+
+            scrollArea.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (scrollArea.scrollTop >= sectionTop - 150) {
+                        current = section.getAttribute('id');
+                    }
+                });
+
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === `#${current}`) {
+                        link.classList.add('active');
+                    }
+                });
+            });
+        };
+        observeSections();
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deployments | Nova Cloud</title>
+    <link rel="stylesheet" href="dashboard-shared.css">
+    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+    <style>
+        /* ── Page‑specific overrides ── */
+        .filter-bar {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .search-wrap {
+            position: relative;
+            flex: 1;
+        }
+
+        .search-wrap i {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        .search-input {
+            width: 100%;
+            background: rgba(30, 41, 59, 0.6);
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            padding: 10px 14px 10px 38px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .search-input:focus {
+            border-color: var(--primary);
+        }
+
+        .filter-chip {
+            background: rgba(30, 41, 59, 0.6);
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            padding: 9px 16px;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .filter-chip.active,
+        .filter-chip:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: rgba(59, 130, 246, 0.06);
+        }
+
+        /* Summary strip */
+        .summary-strip {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .summary-item {
+            background: rgba(30, 41, 59, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: 12px;
+            padding: 1rem 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .summary-item .s-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.95rem;
+            flex-shrink: 0;
+        }
+
+        .s-icon.blue {
+            background: rgba(59, 130, 246, 0.12);
+            color: #3b82f6;
+        }
+
+        .s-icon.green {
+            background: rgba(16, 185, 129, 0.12);
+            color: #10b981;
+        }
+
+        .s-icon.red {
+            background: rgba(239, 68, 68, 0.12);
+            color: #ef4444;
+        }
+
+        .s-icon.yellow {
+            background: rgba(245, 158, 11, 0.12);
+            color: #f59e0b;
+        }
+
+        .summary-item .s-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+
+        .summary-item .s-value {
+            font-size: 1.4rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            line-height: 1;
+            margin-top: 2px;
+        }
+
+        /* Table container */
+        .table-card {
+            background: rgba(30, 41, 59, 0.35);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .table-header h2 {
+            font-size: 1rem;
+            font-weight: 700;
+        }
+
+        table.dep-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table.dep-table th {
+            text-align: left;
+            padding: 0.75rem 1.25rem;
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            color: var(--text-muted);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        table.dep-table td {
+            padding: 1rem 1.25rem;
+            font-size: 0.875rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            vertical-align: middle;
+        }
+
+        table.dep-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        table.dep-table tr:hover td {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .svc-name-cell {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .lang-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .action-btns {
+            display: flex;
+            gap: 6px;
+        }
+
+        .action-btns button {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.15s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+        }
+
+        .action-btns button:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: rgba(59, 130, 246, 0.06);
+        }
+
+        .action-btns button.danger:hover {
+            border-color: var(--error);
+            color: var(--error);
+            background: rgba(239, 68, 68, 0.06);
+        }
+
+        .action-btns button.success:hover {
+            border-color: var(--success);
+            color: var(--success);
+            background: rgba(16, 185, 129, 0.06);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <i class="fas fa-rocket"></i> NOVA CLOUD
+            </div>
+            <nav class="sidebar-nav">
+                <a href="dashboard.html"><i class="fas fa-grid-2"></i> Overview</a>
+                <a href="deployments.html" class="active"><i class="fas fa-boxes-stacked"></i> Deployments</a>
+                <a href="cloud_status.html"><i class="fas fa-globe"></i> Edge Network</a>
+                <a href="billing.html"><i class="fas fa-wallet"></i> Billing</a>
+                <a href="settings.html"><i class="fas fa-sliders"></i> Settings</a>
+                <a href="learn.html"><i class="fas fa-book"></i> Docs</a>
+            </nav>
+            <div class="user-profile" id="userProfile">
+                <img src="" alt="User" id="sidebarAvatar">
+                <div class="user-info">
+                    <span class="name">Loading...</span>
+                    <span class="plan">Pro Plan</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="header">
+                <div>
+                    <h1 class="page-title">Deployments</h1>
+                    <p style="color:var(--text-muted); font-size:0.875rem; margin-top:4px;">Manage all your running
+                        services across Nova Edge.</p>
+                </div>
+                <button class="btn-primary" id="launchBtn">
+                    <i class="fas fa-plus"></i> New Deployment
+                </button>
+            </header>
+
+            <!-- Summary Strip -->
+            <div class="summary-strip">
+                <div class="summary-item">
+                    <div class="s-icon blue"><i class="fas fa-server"></i></div>
+                    <div>
+                        <div class="s-label">Total Services</div>
+                        <div class="s-value" id="s-total">—</div>
+                    </div>
+                </div>
+                <div class="summary-item">
+                    <div class="s-icon green"><i class="fas fa-circle-check"></i></div>
+                    <div>
+                        <div class="s-label">Active</div>
+                        <div class="s-value" id="s-active">—</div>
+                    </div>
+                </div>
+                <div class="summary-item">
+                    <div class="s-icon yellow"><i class="fas fa-circle-notch"></i></div>
+                    <div>
+                        <div class="s-label">Deploying</div>
+                        <div class="s-value" id="s-deploying">—</div>
+                    </div>
+                </div>
+                <div class="summary-item">
+                    <div class="s-icon red"><i class="fas fa-triangle-exclamation"></i></div>
+                    <div>
+                        <div class="s-label">Failed</div>
+                        <div class="s-value" id="s-failed">—</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filter Bar -->
+            <div class="filter-bar">
+                <div class="search-wrap">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="serviceSearch" class="search-input"
+                        placeholder="Search services by name or status…">
+                </div>
+                <button class="filter-chip active" data-filter="all">All</button>
+                <button class="filter-chip" data-filter="production">Production</button>
+                <button class="filter-chip" data-filter="staging">Staging</button>
+                <button class="filter-chip" data-filter="failed">Failed</button>
+            </div>
+
+            <!-- Deployments Table -->
+            <div class="table-card">
+                <div class="table-header">
+                    <h2><i class="fas fa-layer-group" style="margin-right:8px; color:var(--primary);"></i>Service
+                        Registry</h2>
+                    <button class="btn-outline" onclick="fetchProjects()" style="padding:7px 14px; font-size:0.8rem;">
+                        <i class="fas fa-sync"></i> Refresh
+                    </button>
+                </div>
+                <table class="dep-table">
+                    <thead>
+                        <tr>
+                            <th>Service</th>
+                            <th>Status</th>
+                            <th>Region</th>
+                            <th>Last Updated</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="deploymentsTable">
+                        <tr>
+                            <td colspan="5" style="text-align:center; padding:3rem;">
+                                <div class="loading-spinner"></div>
+                                <p style="color:var(--text-muted); margin-top:1rem;">Syncing with Nova Edge…</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <!-- Launch Modal -->
+    <div id="launchModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>🚀 New Deployment</h2>
+                <p style="color:var(--text-muted); font-size:0.875rem; margin-top:4px;">Deploy your application to Nova
+                    Cloud's global edge network.</p>
+            </div>
+            <form id="launchForm">
+                <div class="form-group">
+                    <label>Project Name</label>
+                    <input type="text" id="projName" required placeholder="e.g. api-gateway">
+                </div>
+                <div class="form-group">
+                    <label>Runtime Environment</label>
+                    <select id="projLang">
+                        <option value="node">Node.js (Next.js / Express)</option>
+                        <option value="python">Python 3.11 (Flask / FastAPI)</option>
+                        <option value="rust">Rust → WebAssembly</option>
+                        <option value="go">Go (TinyGo)</option>
+                        <option value="static">Static Site (HTML / React / Vue)</option>
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-outline" onclick="closeModal('launchModal')">Cancel</button>
+                    <button type="submit" class="btn-primary"><i class="fas fa-rocket"></i> Deploy Instantly</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Logs Modal -->
+    <div id="logsModal" class="modal-overlay">
+        <div class="modal-content" style="max-width:760px;">
+            <div class="modal-header">
+                <h2><i class="fas fa-terminal" style="color:var(--primary); margin-right:8px;"></i>Container Logs</h2>
+                <p style="color:var(--text-muted); font-size:0.875rem; margin-top:4px;">Live output from your Nova Edge
+                    instance.</p>
+            </div>
+            <div id="logsContent" class="code-block" style="height:340px; overflow-y:auto;"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn-outline" id="clearLogsBtn"><i class="fas fa-trash"></i> Clear</button>
+                <button type="button" class="btn-primary"
+                    onclick="if(currentLogStream){currentLogStream.close();currentLogStream=null;} closeModal('logsModal')">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/dashboard.js"></script>
+    <script>
+        // Wire up filter chips
+        document.querySelectorAll('.filter-chip').forEach(chip => {
+            chip.addEventListener('click', () => {
+                document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+                chip.classList.add('active');
+                const filter = chip.dataset.filter;
+                const rows = document.querySelectorAll('#deploymentsTable tr[data-status]');
+                rows.forEach(row => {
+                    row.style.display = (filter === 'all' || row.dataset.status.includes(filter)) ? '' : 'none';
+                });
+            });
+        });
+
+        // Clear logs button
+        const clearLogsBtn = document.getElementById('clearLogsBtn');
+        if (clearLogsBtn) {
+            clearLogsBtn.addEventListener('click', () => {
+                const lc = document.getElementById('logsContent');
+                if (lc) lc.innerHTML = '';
+            });
+        }
+
+        // Update summary strip after projects load
+        const origRenderProjects = window.renderProjects;
+        function updateSummary(projects) {
+            document.getElementById('s-total').textContent = projects.length;
+            document.getElementById('s-active').textContent = projects.filter(p => ['production', 'active', 'ready'].includes(p.status?.toLowerCase())).length;
+            document.getElementById('s-deploying').textContent = projects.filter(p => ['deploying', 'starting'].includes(p.status?.toLowerCase())).length;
+            document.getElementById('s-failed').textContent = projects.filter(p => p.status?.toLowerCase() === 'failed').length;
+        }
+
+        // Intercept fetchProjects to also update summary + add data-status attrs
+        const _origFetch = window.fetch;
+        document.addEventListener('DOMContentLoaded', () => {
+            const token = localStorage.getItem('nova_token');
+            if (!token) { window.location.href = '/login.html'; return; }
+
+            // Fetch projects and populate summary
+            fetch('/api/projects', { headers: { 'Authorization': `Bearer ${token}` } })
+                .then(r => r.ok ? r.json() : [])
+                .then(projects => {
+                    updateSummary(projects);
+                    // Add data-status attrs to rows after a tick
+                    setTimeout(() => {
+                        const rows = document.querySelectorAll('#deploymentsTable tr');
+                        rows.forEach((row, i) => {
+                            if (projects[i]) row.dataset.status = projects[i].status?.toLowerCase() || '';
+                        });
+                    }, 600);
+                })
+                .catch(() => { });
+        });
+    </script>
+</body>
+
+</html>

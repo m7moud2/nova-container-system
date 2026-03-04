@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nova Cloud | Documentation</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            background-color: #020617;
+            background-image: none;
+            overflow-x: hidden;
+            font-family: 'Inter', sans-serif;
+            color: #94a3b8;
+        }
+
+        .glow {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(120px);
+            z-index: -1;
+            opacity: 0.5;
+        }
+
+        .glow-1 {
+            top: -10%;
+            left: -10%;
+            width: 50vw;
+            height: 50vw;
+            background: rgba(59, 130, 246, 0.15);
+        }
+
+        .glow-2 {
+            top: 40%;
+            right: -20%;
+            width: 60vw;
+            height: 60vw;
+            background: rgba(139, 92, 246, 0.1);
+        }
+
+        .navbar {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            background: rgba(2, 6, 23, 0.8);
+            backdrop-filter: blur(12px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .docs-wrapper {
+            display: flex;
+            max-width: 1400px;
+            margin: 0 auto;
+            min-height: calc(100vh - 80px);
+        }
+
+        /* Left Nav */
+        .docs-nav {
+            width: 260px;
+            flex-shrink: 0;
+            padding: 2rem 1rem 2rem 0;
+            border-right: 1px solid rgba(255, 255, 255, 0.05);
+            position: sticky;
+            top: 80px;
+            height: calc(100vh - 80px);
+            overflow-y: auto;
+        }
+
+        .docs-nav-group {
+            margin-bottom: 2rem;
+        }
+
+        .docs-nav-group h4 {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #f8fafc;
+            margin-bottom: 0.75rem;
+            padding-left: 1rem;
+            font-weight: 600;
+        }
+
+        .docs-nav-link {
+            display: block;
+            padding: 0.5rem 1rem;
+            color: #94a3b8;
+            text-decoration: none;
+            font-size: 0.95rem;
+            border-radius: 6px;
+            transition: all 0.2s;
+            margin-bottom: 0.25rem;
+        }
+
+        .docs-nav-link:hover {
+            color: #f8fafc;
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .docs-nav-link.active {
+            color: #60a5fa;
+            background: rgba(59, 130, 246, 0.1);
+            font-weight: 500;
+        }
+
+        /* Main Content */
+        .docs-content {
+            flex-grow: 1;
+            padding: 3rem 4rem;
+            max-width: 850px;
+        }
+
+        .docs-content h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            color: #f8fafc;
+            letter-spacing: -1px;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #ffffff 0%, #94a3b8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .docs-content>p.lead {
+            font-size: 1.25rem;
+            line-height: 1.7;
+            color: #cbd5e1;
+            margin-bottom: 3rem;
+        }
+
+        .docs-content h2 {
+            font-size: 1.8rem;
+            color: #f8fafc;
+            margin: 3.5rem 0 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .docs-content h3 {
+            font-size: 1.4rem;
+            color: #e2e8f0;
+            margin: 2rem 0 1rem;
+        }
+
+        .docs-content p {
+            font-size: 1.05rem;
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+        }
+
+        .docs-content ul {
+            font-size: 1.05rem;
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+            padding-left: 1.5rem;
+        }
+
+        .docs-content li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Glassmorphism Callouts */
+        .callout {
+            background: rgba(30, 41, 59, 0.5);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-left: 4px solid #3b82f6;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin: 2rem 0;
+            display: flex;
+            gap: 1rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .callout.warning {
+            border-color: rgba(245, 158, 11, 0.2);
+            border-left-color: #f59e0b;
+        }
+
+        .callout.warning .callout-icon {
+            color: #f59e0b;
+        }
+
+        .callout.success {
+            border-color: rgba(34, 197, 94, 0.2);
+            border-left-color: #22c55e;
+        }
+
+        .callout.success .callout-icon {
+            color: #22c55e;
+        }
+
+        .callout-icon {
+            font-size: 1.25rem;
+            color: #3b82f6;
+            margin-top: 2px;
+        }
+
+        .callout-content p {
+            margin: 0;
+            color: #cbd5e1;
+            font-size: 1rem;
+        }
+
+        /* Premium Code Blocks */
+        .code-block {
+            background: #0d1117;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            margin: 2rem 0;
+            overflow: hidden;
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+        }
+
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 1.25rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .code-lang {
+            font-size: 0.75rem;
+            color: #94a3b8;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .code-copy {
+            background: transparent;
+            border: none;
+            color: #94a3b8;
+            cursor: pointer;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: color 0.2s;
+        }
+
+        .code-copy:hover {
+            color: #f8fafc;
+        }
+
+        .code-content {
+            padding: 1.5rem;
+            overflow-x: auto;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #e2e8f0;
+        }
+
+        .token.comment {
+            color: #64748b;
+        }
+
+        .token.keyword {
+            color: #c678dd;
+        }
+
+        .token.string {
+            color: #98c379;
+        }
+
+        .token.function {
+            color: #61afef;
+        }
+
+        .token.prompt {
+            color: #e06c75;
+            user-select: none;
+            margin-right: 8px;
+        }
+
+        /* Feature Grid */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .feature-card {
+            background: rgba(30, 41, 59, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(59, 130, 246, 0.4);
+            background: rgba(30, 41, 59, 0.5);
+            box-shadow: 0 10px 30px -10px rgba(59, 130, 246, 0.1);
+        }
+
+        .feature-card i {
+            font-size: 1.5rem;
+            color: #3b82f6;
+            margin-bottom: 1rem;
+            background: rgba(59, 130, 246, 0.1);
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+        }
+
+        .feature-card h4 {
+            color: #f8fafc;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .feature-card p {
+            color: #94a3b8;
+            font-size: 0.95rem;
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        /* Right TOC */
+        .docs-toc {
+            width: 200px;
+            flex-shrink: 0;
+            padding: 3rem 0 2rem 1rem;
+            position: sticky;
+            top: 80px;
+            height: calc(100vh - 80px);
+            overflow-y: auto;
+        }
+
+        .toc-title {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #f8fafc;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .toc-link {
+            display: block;
+            color: #64748b;
+            text-decoration: none;
+            font-size: 0.85rem;
+            margin-bottom: 0.5rem;
+            padding-left: 1rem;
+            border-left: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.2s;
+        }
+
+        .toc-link:hover {
+            color: #cbd5e1;
+            border-left-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .toc-link.active {
+            color: #60a5fa;
+            border-left-color: #3b82f6;
+        }
+
+        @media (max-width: 1024px) {
+            .docs-toc {
+                display: none;
+            }
+
+            .docs-content {
+                padding: 2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .docs-nav {
+                display: none;
+            }
+
+            .docs-wrapper {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="glow glow-1"></div>
+    <div class="glow glow-2"></div>
+
+    <nav class="navbar">
+        <div
+            style="max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 1rem 2rem;">
+            <div class="logo" style="font-size: 1.5rem; font-weight: 700; color: #fff;">
+                <a href="index.html" style="color: #fff; text-decoration: none;"><i class="fas fa-rocket"
+                        style="color: #60a5fa;"></i> NOVA CLOUD</a>
+            </div>
+            <div class="nav-links" style="display: flex; gap: 2rem; align-items: center;">
+                <a href="index.html"
+                    style="color: #94a3b8; text-decoration: none; font-weight: 500; transition: color 0.3s;">Home</a>
+                <a href="index.html#features"
+                    style="color: #94a3b8; text-decoration: none; font-weight: 500; transition: color 0.3s;">Features</a>
+                <a href="learn.html" style="color: #60a5fa; text-decoration: none; font-weight: 600;">Docs</a>
+                <a href="login.html" class="btn"
+                    style="color: #60a5fa; text-decoration: none; font-weight: 600; padding: 0.5rem 1rem; border: 1px solid rgba(96, 165, 250, 0.4); border-radius: 6px;">Sign
+                    In</a>
+                <a href="signup.html" class="btn"
+                    style="background: #3b82f6; color: white; text-decoration: none; font-weight: 600; padding: 0.5rem 1.25rem; border-radius: 6px; box-shadow: 0 4px 14px rgba(59, 130, 246, 0.4);">Get
+                    Started</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="docs-wrapper">
+        <!-- Sidebar Navigation -->
+        <aside class="docs-nav">
+            <div class="docs-nav-group">
+                <h4>Getting Started</h4>
+                <a href="#what-is-nova" class="docs-nav-link active">What is Nova?</a>
+                <a href="#installation" class="docs-nav-link">Installation</a>
+                <a href="#quickstart" class="docs-nav-link">Quickstart</a>
+            </div>
+            <div class="docs-nav-group">
+                <h4>Core Concepts</h4>
+                <a href="#architecture" class="docs-nav-link">Architecture</a>
+                <a href="#supported-languages" class="docs-nav-link">Languages</a>
+                <a href="#os-support" class="docs-nav-link">Operating Systems</a>
+            </div>
+            <div class="docs-nav-group">
+                <h4>Platform Guides</h4>
+                <a href="#tutorials" class="docs-nav-link">Tutorials</a>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="docs-content">
+            <h1 id="what-is-nova">What is Nova Cloud?</h1>
+            <p class="lead">Nova is the next-generation serverless container platform built entirely on WebAssembly
+                (Wasm). It completely revolutionizes how we deploy, run, and scale applications without Linux container
+                overhead.</p>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin: 3rem 0;">
+                <div
+                    style="background: rgba(30, 41, 59, 0.3); border: 1px solid rgba(255, 255, 255, 0.05); padding: 1.5rem; border-radius: 16px;">
+                    <h3 style="margin-top: 0;"><i class="fas fa-times-circle text-danger"></i> The Problem Nova Solves
+                    </h3>
+                    <p>Traditional containers (Docker, Podman) are:</p>
+                    <ul style="margin-bottom: 0;">
+                        <li>Slow to start (2-5 seconds)</li>
+                        <li>Heavy on resources (100MB+ overhead)</li>
+                        <li>Complex to configure via Kubernetes</li>
+                        <li>Platform-dependent (Linux kernel required)</li>
+                    </ul>
+                </div>
+                <div
+                    style="background: rgba(30, 41, 59, 0.3); border: 1px solid rgba(59, 130, 246, 0.2); padding: 1.5rem; border-radius: 16px;">
+                    <h3 style="margin-top: 0; color: #60a5fa;"><i class="fas fa-check-circle"></i> The Nova Solution
+                    </h3>
+                    <p>Nova uses WebAssembly to provide:</p>
+                    <ul style="margin-bottom: 0;">
+                        <li><strong style="color: #cbd5e1;">240µs startup</strong> (1000x faster)</li>
+                        <li><strong style="color: #cbd5e1;">5MB overhead</strong> (20x lighter)</li>
+                        <li><strong style="color: #cbd5e1;">Zero config</strong> (just run your code)</li>
+                        <li><strong style="color: #cbd5e1;">True portability</strong> (any OS, any CPU)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h2 id="installation">Installation</h2>
+            <p>Get Nova running on your local machine in under 60 seconds.</p>
+
+            <div class="callout">
+                <div class="callout-icon"><i class="fab fa-apple"></i> <i class="fab fa-linux"></i></div>
+                <div class="callout-content">
+                    <p><strong>macOS & Linux:</strong> Our one-line installer sets everything up via Bash.</p>
+                </div>
+            </div>
+
+            <div class="code-block">
+                <div class="code-header">
+                    <span class="code-lang">Bash</span>
+                    <button class="code-copy"><i class="far fa-copy"></i> Copy</button>
+                </div>
+                <div class="code-content">
+                    <span class="token prompt">$</span> curl -sSf
+                    https://raw.githubusercontent.com/m7moud2/nova-container-system/main/install.sh | sh
+                </div>
+            </div>
+
+            <p>Or, if you prefer building from source, Nova is built in Rust natively:</p>
+
+            <div class="code-block">
+                <div class="code-header">
+                    <span class="code-lang">Bash</span>
+                </div>
+                <div class="code-content">
+                    <span class="token prompt">$</span> git clone https://github.com/m7moud2/nova-container-system.git
+                    <span class="token prompt">$</span> cd nova-container-system
+                    <span class="token prompt">$</span> cargo build --release
+                    <span class="token prompt">$</span> sudo cp target/release/nova_container_system /usr/local/bin/nova
+                </div>
+            </div>
+
+            <div class="callout warning">
+                <div class="callout-icon"><i class="fab fa-windows"></i></div>
+                <div class="callout-content">
+                    <p><strong>Windows Users:</strong> Download the pre-compiled executable directly using PowerShell:
+                        <code>iwr https://github.com/m7moud2/nova-container-system/releases/latest/download/nova-windows-x86_64.exe -OutFile nova.exe</code>
+                    </p>
+                </div>
+            </div>
+
+            <h2 id="quickstart">Quickstart: Your first container</h2>
+            <p>Start your first application in 3 intuitive steps. Nova auto-detects what you're trying to do.</p>
+
+            <ul style="list-style-type: none; padding: 0;">
+                <li style="margin-bottom: 1.5rem; display: flex; gap: 1rem;">
+                    <div
+                        style="background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); color: #60a5fa; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0;">
+                        1</div>
+                    <div>
+                        <strong style="color: #e2e8f0; font-size: 1.1rem;">Create Your App:</strong>
+                        <div class="code-block" style="margin: 0.5rem 0;">
+                            <div class="code-content" style="padding: 1rem;">
+                                <span class="token prompt">$</span> echo 'print("Hello from Nova!")' > app.py
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li style="margin-bottom: 1.5rem; display: flex; gap: 1rem;">
+                    <div
+                        style="background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); color: #60a5fa; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0;">
+                        2</div>
+                    <div>
+                        <strong style="color: #e2e8f0; font-size: 1.1rem;">Run with Nova:</strong>
+                        <div class="code-block" style="margin: 0.5rem 0;">
+                            <div class="code-content" style="padding: 1rem;">
+                                <span class="token prompt">$</span> nova run app.py
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li style="margin-bottom: 1.5rem; display: flex; gap: 1rem;">
+                    <div
+                        style="background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.3); color: #22c55e; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; flex-shrink: 0;">
+                        <i class="fas fa-check"></i>
+                    </div>
+                    <div>
+                        <strong style="color: #e2e8f0; font-size: 1.1rem;">That's It! 🎉</strong>
+                        <p style="margin-top: 0.5rem;">Nova automatically detected Python and ran your app natively
+                            inside a sandboxed Wasm isolate in 240µs.</p>
+                    </div>
+                </li>
+            </ul>
+
+            <h2 id="networking">Edge Networking</h2>
+            <p>Nova's Global Edge Network ensures your application is served from the data center physically closest to
+                your users. When you deploy, your application is replicated across our Anycast network.</p>
+            <ul>
+                <li><strong>Automatic Routing:</strong> Users in Tokyo are routed to our AP-Northeast instances, while
+                    users in London hit EU-West.</li>
+                <li><strong>DDoS Protection:</strong> Built-in L4/L7 mitigation drops malicious traffic before it ever
+                    reaches your Wasm isolate.</li>
+                <li><strong>Built-in SSL:</strong> Every deployment automatically receives a managed TLS 1.3
+                    certificate.</li>
+            </ul>
+
+            <h2 id="security">Zero-Trust Isolation</h2>
+            <p>Unlike Docker and Kubernetes which share the host operating system kernel, Nova utilizes WebAssembly's
+                mathematical memory safety guarantees.</p>
+            <div class="callout success">
+                <div class="callout-icon"><i class="fas fa-shield-alt"></i></div>
+                <div class="callout-content">
+                    <p><strong>Container Escapes are Impossible:</strong> Wasm isolates run inside a strictly bounded
+                        memory sandbox. They cannot access the host filesystem, network, or other processes unless
+                        explicitly permitted via WASI capabilities.</p>
+                </div>
+            </div>
+
+            <h2 id="python">Frameworks: Python & Django</h2>
+            <p>Run your Python applications seamlessly. Nova automatically detects <code>requirements.txt</code> or
+                <code>pyproject.toml</code>.</p>
+            <div class="code-block">
+                <div class="code-header">
+                    <span class="code-lang">Python Deployment</span>
+                </div>
+                <div class="code-content">
+                    <span class="token prompt">$</span> nova deploy ./my-django-app --framework django
+                    <span class="token comment">✓ Python environment analyzed</span>
+                    <span class="token comment">✓ Compiled to Wasm payload (14MB)</span>
+                    <span class="token comment">✓ Deployed securely</span>
+                </div>
+            </div>
+
+            <h2 id="nodejs">Frameworks: Node.js & Next.js</h2>
+            <p>Full support for modern JavaScript and TypeScript frameworks, including Server-Side Rendering (SSR) in
+                Next.js.</p>
+            <div class="code-block">
+                <div class="code-header">
+                    <span class="code-lang">Next.js Deployment</span>
+                </div>
+                <div class="code-content">
+                    <span class="token prompt">$</span> nova deploy ./my-next-app --framework nextjs
+                    <span class="token comment">✓ Next.js build detected</span>
+                    <span class="token comment">✓ Static assets pushed to Edge CDN</span>
+                    <span class="token comment">✓ SSR endpoints compiled to Wasm</span>
+                </div>
+            </div>
+
+            <h2 id="rust">Frameworks: Rust Native</h2>
+            <p>Rust is a first-class citizen on Nova Cloud. Compile your Rust applications directly to the
+                <code>wasm32-wasi</code> target for unparalleled performance.</p>
+            <div class="code-block">
+                <div class="code-header">
+                    <span class="code-lang">Rust Execution</span>
+                </div>
+                <div class="code-content">
+                    <span class="token prompt">$</span> cargo build --target wasm32-wasi --release
+                    <span class="token prompt">$</span> nova run target/wasm32-wasi/release/app.wasm
+                    <span class="token comment">✓ Native Wasm module executed in 240µs</span>
+                </div>
+            </div>
+
+            <h2 id="cli">CLI Commands Reference</h2>
+            <p>Manage your infrastructure directly from the terminal.</p>
+            <div class="code-block">
+                <div class="code-header">
+                    <span class="code-lang">CLI Overview</span>
+                </div>
+                <div class="code-content">
+                    <span class="token prompt">$</span> nova login <span class="token comment"># Authenticate</span>
+                    <span class="token prompt">$</span> nova deploy ./app <span class="token comment"># Push code to
+                        production</span>
+                    <span class="token prompt">$</span> nova logs project-name <span class="token comment"># Stream live
+                        stdout/stderr</span>
+                    <span class="token prompt">$</span> nova env set KEY=VALUE <span class="token comment"># Manage
+                        secrets securely</span>
+                    <span class="token prompt">$</span> nova rollback v4 <span class="token comment"># Instant
+                        0-downtime rollback</span>
+                </div>
+            </div>
+
+            <h2 id="api">REST API</h2>
+            <p>Integrate Nova Cloud into your existing CI/CD pipelines via our secure REST API.</p>
+            <p>All endpoints require a Bearer token in the Authorization header. Generate an API key from the Dashboard.
+            </p>
+            <div class="code-block">
+                <div class="code-header">
+                    <span class="code-lang">API Request Example</span>
+                </div>
+                <div class="code-content">
+                    <span class="token prompt">$</span> curl -X POST https://api.nova.cloud/v1/deploy \
+                    -H "Authorization: Bearer nc_live_12345" \
+                    -H "Content-Type: application/json" \
+                    -d '{"target_id": "proj_xyz", "image_tag": "latest"}'
+                </div>
+            </div>
+
+            <h2 id="architecture">Architecture details</h2>
+            <p>Traditional containerization requires a hypervisor or OS-level cgroups that carry significant baseline
+                memory and startup overhead.</p>
+            <ul>
+                <li><strong>V8 Isolates & Wasmtime:</strong> Instead of booting an OS kernel, we configure isolated
+                    WebAssembly memory segments.</li>
+                <li><strong>Distributed Mesh:</strong> When you deploy, the compiled Wasm binary is immediately
+                    replicated across 42 Edge locations around the globe.</li>
+                <li><strong>Zero-Trust Sandboxing:</strong> Mathematical memory safety provides absolute protection
+                    against container escapes.</li>
+            </ul>
+
+            <h2 id="supported-languages">Supported Languages</h2>
+            <p>Nova leverages automatic language detection and built-in compilation runtimes to support almost every
+                major ecosystem.</p>
+
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                        <i style="margin: 0;" class="fab fa-python"></i>
+                        <span
+                            style="font-size: 0.75rem; background: rgba(34, 197, 94, 0.2); color: #34d399; padding: 2px 8px; border-radius: 12px;">✅
+                            Working Now</span>
+                    </div>
+                    <h4>Python</h4>
+                    <p style="margin-bottom: 1rem;">Run Django, Flask, FastAPI natively.</p>
+                    <code
+                        style="background: rgba(0,0,0,0.5); padding: 4px 8px; border-radius: 4px; font-size: 0.85rem; color: #a8b2d1;">nova run manage.py runserver</code>
+                </div>
+
+                <div class="feature-card">
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                        <i style="margin: 0; color: #22c55e; background: rgba(34, 197, 94, 0.1);"
+                            class="fab fa-node-js"></i>
+                        <span
+                            style="font-size: 0.75rem; background: rgba(34, 197, 94, 0.2); color: #34d399; padding: 2px 8px; border-radius: 12px;">✅
+                            Working Now</span>
+                    </div>
+                    <h4>Node.js</h4>
+                    <p style="margin-bottom: 1rem;">Express, Next.js, and TypeScript.</p>
+                    <code
+                        style="background: rgba(0,0,0,0.5); padding: 4px 8px; border-radius: 4px; font-size: 0.85rem; color: #a8b2d1;">nova run . --framework nextjs</code>
+                </div>
+
+                <div class="feature-card">
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                        <i style="margin: 0; color: #61dafb; background: rgba(97, 218, 251, 0.1);"
+                            class="fab fa-react"></i>
+                        <span
+                            style="font-size: 0.75rem; background: rgba(59, 130, 246, 0.2); color: #60a5fa; padding: 2px 8px; border-radius: 12px;">Ready</span>
+                    </div>
+                    <h4>React / Vue</h4>
+                    <p style="margin-bottom: 1rem;">Deploy static SPA instantly.</p>
+                    <code
+                        style="background: rgba(0,0,0,0.5); padding: 4px 8px; border-radius: 4px; font-size: 0.85rem; color: #a8b2d1;">nova serve ./dist --port 8080</code>
+                </div>
+
+                <div class="feature-card">
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                        <i style="margin: 0; color: #ef4444; background: rgba(239, 68, 68, 0.1);"
+                            class="fas fa-cog"></i>
+                        <span
+                            style="font-size: 0.75rem; background: rgba(139, 92, 246, 0.2); color: #c084fc; padding: 2px 8px; border-radius: 12px;">Native</span>
+                    </div>
+                    <h4>Rust</h4>
+                    <p style="margin-bottom: 1rem;">Native Wasm compilation target.</p>
+                    <code
+                        style="background: rgba(0,0,0,0.5); padding: 4px 8px; border-radius: 4px; font-size: 0.85rem; color: #a8b2d1;">nova run app.wasm</code>
+                </div>
+            </div>
+
+            <div class="callout warning">
+                <div class="callout-icon"><i class="fas fa-hammer"></i></div>
+                <div class="callout-content">
+                    <p><strong>Coming Soon:</strong> SwiftWasm support and Flutter Web compilation targets are currently
+                        in beta.</p>
+                </div>
+            </div>
+
+            <h2 id="os-support">Operating Systems Support</h2>
+            <div style="display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 1.5rem;">
+                <span
+                    style="padding: 10px 20px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 30px; color: #e2e8f0; font-weight: 500;"><i
+                        class="fab fa-apple me-2 text-secondary"></i> macOS</span>
+                <span
+                    style="padding: 10px 20px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 30px; color: #e2e8f0; font-weight: 500;"><i
+                        class="fab fa-ubuntu me-2" style="color: #e95420;"></i> Ubuntu</span>
+                <span
+                    style="padding: 10px 20px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 30px; color: #e2e8f0; font-weight: 500;"><i
+                        class="fab fa-debian me-2" style="color: #a80030;"></i> Debian</span>
+                <span
+                    style="padding: 10px 20px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 30px; color: #e2e8f0; font-weight: 500;"><i
+                        class="fab fa-linux me-2"></i> Alpine Linux</span>
+                <span
+                    style="padding: 10px 20px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 30px; color: #e2e8f0; font-weight: 500;"><i
+                        class="fab fa-windows me-2" style="color: #00a4ef;"></i> Windows (WSL2)</span>
+                <span
+                    style="padding: 10px 20px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 30px; color: #e2e8f0; font-weight: 500;"><i
+                        class="fab fa-aws me-2" style="color: #ff9900;"></i> AWS Graviton</span>
+            </div>
+
+            <h2 id="tutorials">Tutorials</h2>
+            <p>Learn by doing with these full stack architecture guides.</p>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 2rem;">
+                <a href="#"
+                    style="text-decoration: none; padding: 1.5rem; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.02); transition: all 0.3s;"
+                    onmouseover="this.style.background='rgba(255,255,255,0.05)'; this.style.borderColor='rgba(96,165,250,0.5)'"
+                    onmouseout="this.style.background='rgba(255,255,255,0.02)'; this.style.borderColor='rgba(255,255,255,0.1)'">
+                    <h4
+                        style="color: #f8fafc; margin-bottom: 0.5rem; display: flex; align-items: center; justify-content: space-between;">
+                        Build a Flask API <i class="fas fa-arrow-right" style="color: #60a5fa;"></i></h4>
+                    <p style="color: #94a3b8; font-size: 0.95rem; margin: 0;">Create a robust REST API with Python Flask
+                        and deploy it globally without WSGI configuration files.</p>
+                </a>
+                <a href="#"
+                    style="text-decoration: none; padding: 1.5rem; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.02); transition: all 0.3s;"
+                    onmouseover="this.style.background='rgba(255,255,255,0.05)'; this.style.borderColor='rgba(96,165,250,0.5)'"
+                    onmouseout="this.style.background='rgba(255,255,255,0.02)'; this.style.borderColor='rgba(255,255,255,0.1)'">
+                    <h4
+                        style="color: #f8fafc; margin-bottom: 0.5rem; display: flex; align-items: center; justify-content: space-between;">
+                        Deploy Next.js & React <i class="fas fa-arrow-right" style="color: #60a5fa;"></i></h4>
+                    <p style="color: #94a3b8; font-size: 0.95rem; margin: 0;">Build an SSR application, configure Edge
+                        functions, and run securely with dynamic auto-scaling.</p>
+                </a>
+            </div>
+
+            <br><br><br>
+        </main>
+
+        <!-- Right TOC -->
+        <aside class="docs-toc">
+            <div class="toc-title">On this page</div>
+            <a href="#what-is-nova" class="toc-link active">What is Nova?</a>
+            <a href="#installation" class="toc-link">Installation</a>
+            <a href="#quickstart" class="toc-link">Quickstart</a>
+            <a href="#architecture" class="toc-link">Architecture</a>
+            <a href="#networking" class="toc-link">Edge Networking</a>
+            <a href="#security" class="toc-link">Zero-Trust Isolation</a>
+            <a href="#python" class="toc-link">Python & Django</a>
+            <a href="#nodejs" class="toc-link">Node.js & Next.js</a>
+            <a href="#rust" class="toc-link">Rust Native</a>
+            <a href="#cli" class="toc-link">CLI Commands</a>
+            <a href="#api" class="toc-link">REST API</a>
+            <a href="#tutorials" class="toc-link">Tutorials</a>
+        </aside>
+    </div>
+
+    <footer
+        style="border-top: 1px solid rgba(255,255,255,0.05); padding: 2rem 0; margin-top: 2rem; background: rgba(2, 6, 23, 0.8);">
+        <div
+            style="max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 2rem;">
+            <div style="color: #94a3b8; font-size: 0.9rem;">&copy; 2026 Nova Systems. The Post-Docker Cloud.</div>
+            <div style="display: flex; gap: 1rem;">
+                <a href="https://github.com/m7moud2/nova-container-system"
+                    style="color: #94a3b8; font-size: 1.2rem; transition: color 0.3s;"><i class="fab fa-github"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        // Copy to clipboard functionality
+        document.querySelectorAll('.code-copy').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const codeBlock = e.target.closest('.code-block').querySelector('.code-content').innerText;
+                const cleanCode = codeBlock.replace(/^\$\s/gm, ''); // Remove prompt $
+                navigator.clipboard.writeText(cleanCode);
+
+                const originalText = e.target.innerHTML;
+                e.target.innerHTML = '<i class="fas fa-check" style="color: #34d399;"></i> Copied';
+                setTimeout(() => {
+                    e.target.innerHTML = originalText;
+                }, 2000);
+            });
+        });
+
+        // Smooth scrolling & active state for TOC
+        const observeSections = () => {
+            const sections = document.querySelectorAll('h2, h1');
+            const navLinks = document.querySelectorAll('.toc-link');
+            const leftNavLinks = document.querySelectorAll('.docs-nav-link');
+
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (scrollY >= sectionTop - 150) {
+                        current = section.getAttribute('id');
+                    }
+                });
+
+                if (current) {
+                    navLinks.forEach(link => {
+                        link.classList.remove('active');
+                        if (link.getAttribute('href') === `#${current}`) {
+                            link.classList.add('active');
+                        }
+                    });
+
+                    leftNavLinks.forEach(link => {
+                        link.classList.remove('active');
+                        if (link.getAttribute('href') === `#${current}`) {
+                            link.classList.add('active');
+                        }
+                    });
+                }
+            });
+        };
+        observeSections();
+    </script>
+</body>
+
+</html>

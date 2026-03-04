@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nova Cloud - Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <i class="fas fa-rocket"></i> Nova Cloud
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="active"><i class="fas fa-home"></i> Overview</a>
+                <a href="#"><i class="fas fa-box"></i> Deployments</a>
+                <a href="#"><i class="fas fa-chart-line"></i> Analytics</a>
+                <a href="#billing"><i class="fas fa-credit-card"></i> Billing</a>
+                <a href="#"><i class="fas fa-cog"></i> Settings</a>
+            </nav>
+            <div class="user-profile">
+                <img src="https://ui-avatars.com/api/?name=User&background=00ff9d&color=0f0f1a" alt="User">
+                <div class="user-info">
+                    <span class="name">Demo User</span>
+                    <span class="plan">Pro Plan</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="top-bar">
+                <h1>Overview</h1>
+                <button class="btn-primary"><i class="fas fa-plus"></i> New Project</button>
+            </header>
+
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+                <div class="card stat-card">
+                    <div class="stat-icon purple"><i class="fas fa-cube"></i></div>
+                    <div class="stat-info">
+                        <h3>Active Containers</h3>
+                        <p class="value">12</p>
+                    </div>
+                </div>
+                <div class="card stat-card">
+                    <div class="stat-icon green"><i class="fas fa-check-circle"></i></div>
+                    <div class="stat-info">
+                        <h3>Health Status</h3>
+                        <p class="value">99.9%</p>
+                    </div>
+                </div>
+                <div class="card stat-card">
+                    <div class="stat-icon blue"><i class="fas fa-memory"></i></div>
+                    <div class="stat-info">
+                        <h3>Memory Usage</h3>
+                        <p class="value">1.2 GB</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Deployments -->
+            <section class="deployments-section">
+                <h2>Recent Deployments</h2>
+                <div class="table-container card">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Project</th>
+                                <th>Status</th>
+                                <th>Commit</th>
+                                <th>Duration</th>
+                                <th>Created</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div class="project-cell">
+                                        <i class="fab fa-node-js"></i>
+                                        <div>
+                                            <strong>api-gateway</strong>
+                                            <span class="sub-text">production</span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td><span class="badge success">Ready</span></td>
+                                <td class="mono">7a2b9d1</td>
+                                <td>1.2s</td>
+                                <td>2m ago</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="project-cell">
+                                        <i class="fab fa-python"></i>
+                                        <div>
+                                            <strong>worker-process</strong>
+                                            <span class="sub-text">staging</span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td><span class="badge success">Ready</span></td>
+                                <td class="mono">c4f1e2a</td>
+                                <td>2.4s</td>
+                                <td>15m ago</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="project-cell">
+                                        <i class="fab fa-rust"></i>
+                                        <div>
+                                            <strong>core-engine</strong>
+                                            <span class="sub-text">dev</span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td><span class="badge error">Failed</span></td>
+                                <td class="mono">b9e8c7d</td>
+                                <td>0.5s</td>
+                                <td>1h ago</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Billing Section -->
+            <section id="billing" class="billing-section" style="margin-top: 3rem;">
+                <h2>Billing & Usage</h2>
+                <div class="card" style="margin-top: 1rem;">
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                        <div>
+                            <h3 style="font-size: 1.2rem; margin-bottom: 0.5rem;">Pro Plan</h3>
+                            <p style="color: var(--text-muted);">$29/month • Billed monthly</p>
+                        </div>
+                        <button class="btn-primary"
+                            style="background-color: var(--text-muted); cursor: default;">Current Plan</button>
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                            <span>CPU Usage</span>
+                            <span>15,400 / 20,000 instructions</span>
+                        </div>
+                        <div
+                            style="width: 100%; height: 8px; background-color: rgba(255,255,255,0.1); border-radius: 4px; overflow: hidden;">
+                            <div style="width: 77%; height: 100%; background-color: var(--primary-color);"></div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                            <span>Storage</span>
+                            <span>4.2 GB / 10 GB</span>
+                        </div>
+                        <div
+                            style="width: 100%; height: 8px; background-color: rgba(255,255,255,0.1); border-radius: 4px; overflow: hidden;">
+                            <div style="width: 42%; height: 100%; background-color: #4169e1;"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+    </div>
+    <script src="js/dashboard.js"></script>
+</body>
+
+</html>

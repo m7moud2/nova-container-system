@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Details | Nova Cloud</title>
+    <link rel="stylesheet" href="dashboard-shared.css">
+    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Page‑specific additions */
+        .project-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 2rem;
+        }
+
+        .project-title-area {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+        }
+
+        .project-icon-lg {
+            width: 60px;
+            height: 60px;
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.25);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            color: var(--primary);
+            flex-shrink: 0;
+        }
+
+        .project-meta h1 {
+            font-size: 1.75rem;
+            font-weight: 800;
+            margin-bottom: 6px;
+        }
+
+        .project-url {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-family: var(--font-mono);
+            opacity: 0.85;
+            transition: opacity 0.2s;
+        }
+
+        .project-url:hover {
+            opacity: 1;
+        }
+
+        /* Metrics row */
+        .metrics-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.25rem;
+            margin-bottom: 2rem;
+        }
+
+        .metric-card {
+            background: rgba(30, 41, 59, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: 14px;
+            padding: 1.25rem;
+        }
+
+        .metric-card .m-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .metric-card .m-value {
+            font-size: 2rem;
+            font-weight: 800;
+            font-family: var(--font-mono);
+            letter-spacing: -1px;
+        }
+
+        .metric-card .m-sub {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 1.75rem;
+            background: rgba(15, 23, 42, 0.5);
+            border-radius: 12px;
+            padding: 4px;
+            width: fit-content;
+        }
+
+        .tab {
+            padding: 8px 20px;
+            color: var(--text-muted);
+            cursor: pointer;
+            border-radius: 9px;
+            font-weight: 500;
+            font-size: 0.875rem;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+
+        .tab:hover {
+            color: var(--text-main);
+        }
+
+        .tab.active {
+            background: rgba(59, 130, 246, 0.15);
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        /* Chart */
+        .chart-wrapper {
+            height: 260px;
+            position: relative;
+        }
+
+        /* Env vars */
+        .env-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .env-table th {
+            text-align: left;
+            padding: 0.75rem 1rem;
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .env-table td {
+            padding: 0.9rem 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            font-size: 0.875rem;
+        }
+
+        .env-key {
+            font-family: var(--font-mono);
+            color: #a78bfa;
+            background: rgba(167, 139, 250, 0.08);
+            padding: 3px 8px;
+            border-radius: 5px;
+            font-size: 0.82rem;
+        }
+
+        .env-val {
+            font-family: var(--font-mono);
+            color: var(--text-muted);
+            font-size: 0.82rem;
+        }
+
+        .reveal-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 0.85rem;
+            padding: 2px 6px;
+        }
+
+        .reveal-btn:hover {
+            color: var(--text-main);
+        }
+
+        /* Deployment history */
+        .dep-row td:first-child {
+            font-family: var(--font-mono);
+            font-size: 0.78rem;
+            color: var(--text-muted);
+        }
+
+        /* Section card */
+        .section-card {
+            background: rgba(30, 41, 59, 0.35);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 14px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-card h2 {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-card h2 i {
+            color: var(--primary);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo"><i class="fas fa-rocket"></i> NOVA CLOUD</div>
+            <nav class="sidebar-nav">
+                <a href="dashboard.html"><i class="fas fa-grid-2"></i> Overview</a>
+                <a href="deployments.html" class="active"><i class="fas fa-boxes-stacked"></i> Deployments</a>
+                <a href="cloud_status.html"><i class="fas fa-globe"></i> Edge Network</a>
+                <a href="billing.html"><i class="fas fa-wallet"></i> Billing</a>
+                <a href="settings.html"><i class="fas fa-sliders"></i> Settings</a>
+                <a href="learn.html"><i class="fas fa-book"></i> Docs</a>
+            </nav>
+            <div class="user-profile" id="userProfile">
+                <img src="" alt="User" id="sidebarAvatar">
+                <div class="user-info">
+                    <span class="name">Loading...</span>
+                    <span class="plan">Pro Plan</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Breadcrumb -->
+            <div style="margin-bottom:1.5rem;">
+                <a href="deployments.html"
+                    style="color:var(--text-muted); text-decoration:none; font-size:0.875rem; display:inline-flex; align-items:center; gap:6px;">
+                    <i class="fas fa-arrow-left"></i> Back to Deployments
+                </a>
+            </div>
+
+            <!-- Project Header -->
+            <div class="project-header">
+                <div class="project-title-area">
+                    <div class="project-icon-lg" id="projectIconLg"><i class="fab fa-node-js"></i></div>
+                    <div class="project-meta">
+                        <div style="display:flex; align-items:center; gap:12px; margin-bottom:6px;">
+                            <h1 id="detailName">Loading…</h1>
+                            <span class="badge success">Active</span>
+                        </div>
+                        <a href="#" class="project-url" id="projectUrlLink" target="_blank">
+                            <i class="fas fa-external-link-alt"></i>
+                            <span id="detailUrl">—.nova.cloud</span>
+                        </a>
+                    </div>
+                </div>
+                <div style="display:flex; gap:0.75rem; align-items:center;">
+                    <button class="btn-outline" id="showLogsBtn"><i class="fas fa-terminal"></i> Logs</button>
+                    <button class="btn-outline" id="redeployBtn"><i class="fas fa-sync"></i> Redeploy</button>
+                    <button class="btn-primary" id="suspendBtn"
+                        style="background:linear-gradient(135deg,#ef4444,#dc2626);">
+                        <i class="fas fa-stop"></i> Suspend
+                    </button>
+                </div>
+            </div>
+
+            <!-- Metrics Strip -->
+            <div class="metrics-row">
+                <div class="metric-card">
+                    <div class="m-label"><i class="fas fa-bolt" style="color:#f59e0b;"></i> Avg Response</div>
+                    <div class="m-value" style="color:#f59e0b;">12ms</div>
+                    <div class="m-sub">↓ 2ms vs last hour</div>
+                </div>
+                <div class="metric-card">
+                    <div class="m-label"><i class="fas fa-chart-bar" style="color:#3b82f6;"></i> Requests (24h)</div>
+                    <div class="m-value" style="color:#3b82f6;">1.4M</div>
+                    <div class="m-sub">↑ +8% vs yesterday</div>
+                </div>
+                <div class="metric-card">
+                    <div class="m-label"><i class="fas fa-memory" style="color:#10b981;"></i> Peak Memory</div>
+                    <div class="m-value" style="color:#10b981;">45<span style="font-size:1.1rem;">MB</span></div>
+                    <div class="m-sub">of 256 MB limit</div>
+                </div>
+            </div>
+
+            <!-- Tabs -->
+            <div class="tabs">
+                <div class="tab active" data-tab="metrics"><i class="fas fa-chart-line"></i> Metrics</div>
+                <div class="tab" data-tab="deployments"><i class="fas fa-history"></i> History</div>
+                <div class="tab" data-tab="envs"><i class="fas fa-key"></i> Env Vars</div>
+                <div class="tab" data-tab="settings"><i class="fas fa-cog"></i> Settings</div>
+            </div>
+
+            <!-- ── METRICS TAB ── -->
+            <div id="tab-metrics">
+                <div class="section-card">
+                    <h2><i class="fas fa-chart-area"></i> Traffic — Requests per Minute</h2>
+                    <div class="chart-wrapper">
+                        <canvas id="trafficChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <h2><i class="fas fa-microchip"></i> Memory Usage (Last 24h)</h2>
+                    <div class="chart-wrapper">
+                        <canvas id="memoryChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ── HISTORY TAB ── -->
+            <div id="tab-deployments" style="display:none;">
+                <div class="section-card">
+                    <h2><i class="fas fa-history"></i> Deployment History</h2>
+                    <table class="env-table" style="margin-top:0;">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Status</th>
+                                <th>Timestamp</th>
+                                <th>Details</th>
+                            </tr>
+                        </thead>
+                        <tbody id="historyTableBody">
+                            <tr>
+                                <td colspan="4" style="text-align:center; padding:2rem; color:var(--text-muted);">
+                                    <div class="loading-spinner"></div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ── ENV VARS TAB ── -->
+            <div id="tab-envs" style="display:none;">
+                <div class="section-card">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+                        <h2 style="margin:0;"><i class="fas fa-key"></i> Environment Variables</h2>
+                        <button class="btn-primary" style="font-size:0.82rem;"><i class="fas fa-plus"></i> Add
+                            Variable</button>
+                    </div>
+                    <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:1.5rem;">
+                        Variables are AES‑256 encrypted at rest and injected at container startup via WASI.
+                    </p>
+                    <table class="env-table">
+                        <thead>
+                            <tr>
+                                <th>Key</th>
+                                <th>Value</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="env-key">DATABASE_URL</span></td>
+                                <td><span class="env-val">postgres://user:••••••••@edge-db.nova.cloud/db</span></td>
+                                <td><button class="reveal-btn"><i class="fas fa-eye"></i></button></td>
+                            </tr>
+                            <tr>
+                                <td><span class="env-key">API_SECRET_KEY</span></td>
+                                <td><span class="env-val">sk_live_••••••••••••••••••••••</span></td>
+                                <td><button class="reveal-btn"><i class="fas fa-eye"></i></button></td>
+                            </tr>
+                            <tr>
+                                <td><span class="env-key">NODE_ENV</span></td>
+                                <td><span class="env-val">production</span></td>
+                                <td><button class="reveal-btn"><i class="fas fa-pen"></i></button></td>
+                            </tr>
+                            <tr>
+                                <td><span class="env-key">NOVA_REGION</span></td>
+                                <td><span class="env-val">us-east-1</span></td>
+                                <td><button class="reveal-btn"><i class="fas fa-pen"></i></button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ── SETTINGS TAB ── -->
+            <div id="tab-settings" style="display:none;">
+                <div class="section-card">
+                    <h2><i class="fas fa-cog"></i> Project Settings</h2>
+                    <div class="form-group">
+                        <label>Project Name</label>
+                        <input type="text" id="settingsName" placeholder="project-name">
+                    </div>
+                    <div class="form-group">
+                        <label>Runtime</label>
+                        <select>
+                            <option>Node.js</option>
+                            <option>Python</option>
+                            <option>Rust (Wasm)</option>
+                        </select>
+                    </div>
+                    <div
+                        style="display:flex; justify-content:space-between; align-items:center; margin-top:2rem; padding-top:1.5rem; border-top:1px solid var(--border);">
+                        <div>
+                            <h3 style="color:var(--error); font-size:0.95rem; margin-bottom:4px;">Danger Zone</h3>
+                            <p style="color:var(--text-muted); font-size:0.82rem;">Permanently delete this project and
+                                all its data.</p>
+                        </div>
+                        <button class="btn-primary" style="background:linear-gradient(135deg,#ef4444,#dc2626);">
+                            <i class="fas fa-trash"></i> Delete Project
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Logs Modal -->
+    <div id="logsModal" class="modal-overlay">
+        <div class="modal-content" style="max-width:780px;">
+            <div class="modal-header">
+                <h2><i class="fas fa-terminal" style="color:var(--primary); margin-right:8px;"></i>Container Logs</h2>
+                <p style="color:var(--text-muted); font-size:0.875rem; margin-top:4px;">Real-time output from your Nova
+                    Edge instance.</p>
+            </div>
+            <div id="logsContent" class="code-block" style="height:360px; overflow-y:auto;"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn-outline"
+                    onclick="document.getElementById('logsContent').innerHTML=''"><i class="fas fa-trash"></i>
+                    Clear</button>
+                <button type="button" class="btn-primary"
+                    onclick="if(currentLogStream){currentLogStream.close();currentLogStream=null;} closeModal('logsModal')">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/dashboard.js"></script>
+    <script>
+        // ── URL params ──────────────────────────────────────────
+        const urlParams = new URLSearchParams(window.location.search);
+        const pid = urlParams.get('id');
+
+        if (pid) {
+            document.getElementById('detailName').textContent = pid;
+            document.getElementById('settingsName').value = pid;
+            const slug = pid.toLowerCase().replace(/\s+/g, '-');
+            document.getElementById('detailUrl').textContent = `${slug}.nova.cloud`;
+            document.getElementById('projectUrlLink').href = `https://${slug}.nova.cloud`;
+        }
+
+        // ── Auth guard ─────────────────────────────────────────
+        document.addEventListener('DOMContentLoaded', () => {
+            const token = localStorage.getItem('nova_token');
+            const user = JSON.parse(localStorage.getItem('nova_user') || '{}');
+            if (!token) { window.location.href = '/login.html'; return; }
+
+            if (user.name) {
+                document.querySelector('.user-info .name').textContent = user.name;
+                document.getElementById('sidebarAvatar').src =
+                    `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=3b82f6&color=fff`;
+            }
+        });
+
+        // ── Tab switching ──────────────────────────────────────
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                const target = tab.dataset.tab;
+                ['metrics', 'deployments', 'envs', 'settings'].forEach(id => {
+                    const el = document.getElementById('tab-' + id);
+                    if (el) el.style.display = id === target ? 'block' : 'none';
+                });
+                if (target === 'deployments') fetchDeploymentHistory();
+            });
+        });
+
+        // ── Header buttons ─────────────────────────────────────
+        document.getElementById('showLogsBtn').addEventListener('click', () => {
+            if (pid) showLogs(pid);
+        });
+
+        document.getElementById('redeployBtn').addEventListener('click', () => {
+            if (pid) controlProject(pid, 'redeploy');
+        });
+
+        document.getElementById('suspendBtn').addEventListener('click', () => {
+            if (pid && confirm('Suspend this project?')) controlProject(pid, 'stop');
+        });
+
+        // ── Deployment History ──────────────────────────────────
+        async function fetchDeploymentHistory() {
+            const tbody = document.getElementById('historyTableBody');
+            const token = localStorage.getItem('nova_token');
+            if (!pid || !token) return;
+
+            tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:2rem;"><div class="loading-spinner"></div></td></tr>';
+            try {
+                const res = await fetch(`/api/projects/${pid}/deployments`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (!res.ok) throw new Error('HTTP ' + res.status);
+                const history = await res.json();
+                tbody.innerHTML = '';
+
+                if (!history.length) {
+                    tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:var(--text-muted); padding:2rem;">No deployment history found.</td></tr>';
+                    return;
+                }
+
+                history.forEach(d => {
+                    const rawDate = d.created_at || d.timestamp || '';
+                    const date = rawDate
+                        ? new Date(rawDate.replace(' ', 'T')).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' })
+                        : '—';
+                    const badgeCls = d.status?.toLowerCase().includes('success') ? 'success'
+                        : d.status?.toLowerCase().includes('fail') ? 'error' : 'warning';
+
+                    tbody.innerHTML += `
+                        <tr class="dep-row">
+                            <td>${d.id}</td>
+                            <td><span class="badge ${badgeCls}">${d.status}</span></td>
+                            <td style="color:var(--text-muted);">${date}</td>
+                            <td style="color:${d.error_info ? 'var(--error)' : 'var(--text-muted)'}; font-size:0.82rem;">
+                                ${d.error_info || 'Serving traffic normally'}
+                            </td>
+                        </tr>`;
+                });
+            } catch (e) {
+                tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:var(--error); padding:2rem;">Failed to load history — ${e.message}</td></tr>`;
+            }
+        }
+
+        // ── Charts ─────────────────────────────────────────────
+        function mkGrad(ctx, c1, c2) {
+            const g = ctx.createLinearGradient(0, 0, 0, 260);
+            g.addColorStop(0, c1); g.addColorStop(1, c2); return g;
+        }
+
+        const labels = ['00:00', '02:00', '04:00', '06:00', '08:00', '10:00', '12:00', '14:00', '16:00', '18:00', '20:00', 'Now'];
+        const chartDefaults = {
+            responsive: true, maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+                x: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#64748b', maxRotation: 0 } },
+                y: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#64748b' }, beginAtZero: true }
+            }
+        };
+
+        const trafficCtx = document.getElementById('trafficChart').getContext('2d');
+        new Chart(trafficCtx, {
+            type: 'line',
+            data: {
+                labels,
+                datasets: [{
+                    label: 'RPM',
+                    data: [120, 95, 60, 180, 480, 820, 960, 740, 610, 430, 350, 420],
+                    borderColor: '#3b82f6',
+                    backgroundColor: mkGrad(trafficCtx, 'rgba(59,130,246,0.35)', 'rgba(59,130,246,0)'),
+                    borderWidth: 2, fill: true, tension: 0.4,
+                    pointRadius: 3, pointBackgroundColor: '#fff', pointBorderColor: '#3b82f6'
+                }]
+            },
+            options: chartDefaults
+        });
+
+        const memCtx = document.getElementById('memoryChart').getContext('2d');
+        new Chart(memCtx, {
+            type: 'line',
+            data: {
+                labels,
+                datasets: [{
+                    label: 'Memory MB',
+                    data: [22, 24, 21, 28, 38, 44, 45, 42, 39, 35, 32, 34],
+                    borderColor: '#10b981',
+                    backgroundColor: mkGrad(memCtx, 'rgba(16,185,129,0.3)', 'rgba(16,185,129,0)'),
+                    borderWidth: 2, fill: true, tension: 0.4,
+                    pointRadius: 3, pointBackgroundColor: '#fff', pointBorderColor: '#10b981'
+                }]
+            },
+            options: { ...chartDefaults }
+        });
+    </script>
+</body>
+
+</html>

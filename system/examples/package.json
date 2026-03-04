@@ -1,0 +1,12 @@
+{
+  "name": "nova-nodejs-test",
+  "version": "1.0.0",
+  "description": "Test Node.js app for Nova",
+  "main": "test_nodejs_app.js",
+  "scripts": {
+    "start": "node test_nodejs_app.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}

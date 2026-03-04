@@ -1,0 +1,26 @@
+# Rust
+target/
+**/*.rs.bk
+Cargo.lock
+
+# Database
+*.db
+*.sqlite
+*.db-journal
+*.db-shm
+*.db-wal
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+
+# Logs
+logs/
+*.log
+
+# Project specific
+system/nova_dashboard.db
+/tmp/nova_*

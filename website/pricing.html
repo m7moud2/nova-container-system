@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pricing | Nova Cloud — Simple, Scalable Plans</title>
+    <meta name="description"
+        content="Nova Cloud pricing — from free hobby tier to enterprise edge computing. No Docker. No Kubernetes. Just deploy.">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --bg: #020617;
+            --bg-card: #0f172a;
+            --border: rgba(255, 255, 255, 0.06);
+            --text: #f8fafc;
+            --muted: #94a3b8;
+            --primary: #3b82f6;
+            --secondary: #8b5cf6;
+            --success: #10b981;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* ── Ambient glows ── */
+        .glow {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(120px);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .glow-1 {
+            top: -10%;
+            left: -15%;
+            width: 60vw;
+            height: 60vw;
+            background: rgba(59, 130, 246, 0.18);
+            animation: floatG 18s ease-in-out infinite alternate;
+        }
+
+        .glow-2 {
+            top: 40%;
+            right: -20%;
+            width: 50vw;
+            height: 50vw;
+            background: rgba(139, 92, 246, 0.15);
+            animation: floatG 22s ease-in-out infinite alternate-reverse;
+        }
+
+        @keyframes floatG {
+            from {
+                transform: translate(0, 0) scale(1);
+            }
+
+            to {
+                transform: translate(60px, 80px) scale(1.1);
+            }
+        }
+
+        /* ── Nav ── */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 1.25rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(2, 6, 23, 0.75);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nav-brand {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: #fff;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--muted);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: #fff;
+        }
+
+        .btn-nav {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: #fff;
+            padding: 0.55rem 1.4rem;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+            box-shadow: 0 4px 14px rgba(59, 130, 246, 0.3);
+        }
+
+        .btn-nav:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        /* ── Page wrapper ── */
+        .page {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* ── Hero ── */
+        .pricing-hero {
+            padding: 9rem 0 4rem;
+            text-align: center;
+        }
+
+        .tag-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 5px 16px;
+            border-radius: 30px;
+            background: rgba(59, 130, 246, 0.08);
+            border: 1px solid rgba(59, 130, 246, 0.25);
+            color: #93c5fd;
+            font-size: 0.82rem;
+            font-weight: 600;
+            margin-bottom: 1.75rem;
+        }
+
+        .pricing-hero h1 {
+            font-size: clamp(2.5rem, 5vw, 4.5rem);
+            font-weight: 900;
+            letter-spacing: -2px;
+            line-height: 1.1;
+            background: linear-gradient(to bottom right, #ffffff 40%, #94a3b8);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1.25rem;
+        }
+
+        .pricing-hero p {
+            font-size: 1.15rem;
+            color: var(--muted);
+            max-width: 560px;
+            margin: 0 auto 3rem;
+            line-height: 1.7;
+        }
+
+        /* Billing toggle */
+        .toggle-wrap {
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid var(--border);
+            border-radius: 50px;
+            padding: 6px 8px;
+            margin-bottom: 4rem;
+        }
+
+        .toggle-btn {
+            padding: 8px 24px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            border: none;
+            color: var(--muted);
+            background: transparent;
+            transition: all 0.25s;
+        }
+
+        .toggle-btn.active {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: #fff;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.35);
+        }
+
+        .save-badge {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.25);
+            color: #34d399;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* ── Plans grid ── */
+        .plans-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            align-items: start;
+            margin-bottom: 6rem;
+        }
+
+        .plan-card {
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 2.5rem;
+            position: relative;
+            transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            backdrop-filter: blur(16px);
+        }
+
+        .plan-card:hover {
+            transform: translateY(-6px);
+            border-color: rgba(96, 165, 250, 0.3);
+            box-shadow: 0 20px 50px -15px rgba(0, 0, 0, 0.6);
+        }
+
+        /* Featured plan */
+        .plan-card.featured {
+            border-color: rgba(99, 102, 241, 0.6);
+            background: linear-gradient(160deg, rgba(30, 27, 75, 0.85), rgba(15, 23, 42, 0.9));
+            box-shadow: 0 0 0 1px rgba(139, 92, 246, 0.3), 0 20px 60px -20px rgba(139, 92, 246, 0.4);
+        }
+
+        .plan-card.featured:hover {
+            box-shadow: 0 0 0 1px rgba(139, 92, 246, 0.5), 0 30px 70px -20px rgba(139, 92, 246, 0.5);
+            transform: translateY(-8px) scale(1.01);
+        }
+
+        .popular-badge {
+            position: absolute;
+            top: -14px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: #fff;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 5px 18px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 14px rgba(59, 130, 246, 0.4);
+            white-space: nowrap;
+        }
+
+        .plan-name {
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--muted);
+            margin-bottom: 1.25rem;
+        }
+
+        .plan-price {
+            display: flex;
+            align-items: flex-end;
+            gap: 6px;
+            margin-bottom: 8px;
+        }
+
+        .price-num {
+            font-size: 3.5rem;
+            font-weight: 900;
+            letter-spacing: -2px;
+            line-height: 1;
+            color: #fff;
+        }
+
+        .price-period {
+            color: var(--muted);
+            font-size: 0.9rem;
+            padding-bottom: 8px;
+        }
+
+        .price-annual {
+            font-size: 0.82rem;
+            color: var(--muted);
+            margin-bottom: 2rem;
+            min-height: 1.2rem;
+        }
+
+        .plan-desc {
+            color: var(--muted);
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+        }
+
+        .plan-btn {
+            display: block;
+            width: 100%;
+            padding: 13px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            text-align: center;
+            text-decoration: none;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+            margin-bottom: 2rem;
+        }
+
+        .plan-btn.primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: #fff;
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+        }
+
+        .plan-btn.primary:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        .plan-btn.outline {
+            background: transparent;
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .plan-btn.outline:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .features-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            font-size: 0.9rem;
+            color: #cbd5e1;
+            line-height: 1.5;
+        }
+
+        .feature-item i {
+            font-size: 0.85rem;
+            margin-top: 2px;
+            flex-shrink: 0;
+        }
+
+        .chk {
+            color: #34d399;
+        }
+
+        .cross {
+            color: #ef4444;
+        }
+
+        .section-divider {
+            border: none;
+            border-top: 1px solid var(--border);
+            margin: 2rem 0;
+        }
+
+        /* ── Compare Table ── */
+        .compare-section {
+            margin-bottom: 8rem;
+        }
+
+        .compare-section h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+            margin-bottom: 0.75rem;
+        }
+
+        .compare-section .sub {
+            text-align: center;
+            color: var(--muted);
+            font-size: 1rem;
+            margin-bottom: 3rem;
+        }
+
+        .compare-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .compare-table th,
+        .compare-table td {
+            padding: 1rem 1.5rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.9rem;
+        }
+
+        .compare-table thead tr {
+            background: rgba(15, 23, 42, 0.8);
+        }
+
+        .compare-table th {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--muted);
+        }
+
+        .compare-table tbody tr:hover td {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .col-featured {
+            background: rgba(99, 102, 241, 0.04);
+            border-left: 1px solid rgba(99, 102, 241, 0.2);
+            border-right: 1px solid rgba(99, 102, 241, 0.2);
+            font-weight: 600;
+            color: #a5b4fc;
+        }
+
+        /* ── FAQ ── */
+        .faq-section {
+            margin-bottom: 8rem;
+        }
+
+        .faq-section h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+            margin-bottom: 3rem;
+        }
+
+        .faq-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .faq-item {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.5rem;
+        }
+
+        .faq-item h3 {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .faq-item p {
+            color: var(--muted);
+            font-size: 0.88rem;
+            line-height: 1.7;
+        }
+
+        /* ── CTA ── */
+        .cta-section {
+            text-align: center;
+            padding: 5rem 2rem 8rem;
+        }
+
+        .cta-box {
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.9));
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 28px;
+            padding: 4rem 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+        }
+
+        .cta-box h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+            margin-bottom: 1rem;
+        }
+
+        .cta-box p {
+            color: var(--muted);
+            margin-bottom: 2.5rem;
+            font-size: 1rem;
+        }
+
+        .btn-cta {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: #fff;
+            padding: 1rem 2.5rem;
+            border-radius: 14px;
+            font-weight: 700;
+            font-size: 1.05rem;
+            text-decoration: none;
+            box-shadow: 0 6px 24px rgba(99, 102, 241, 0.4);
+            transition: all 0.2s;
+        }
+
+        .btn-cta:hover {
+            transform: translateY(-2px);
+            opacity: 0.9;
+        }
+
+        /* ── Footer ── */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 3rem 2rem;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.85rem;
+        }
+
+        @media(max-width: 900px) {
+            .plans-grid {
+                grid-template-columns: 1fr;
+                max-width: 480px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .faq-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="glow glow-1"></div>
+    <div class="glow glow-2"></div>
+
+    <!-- Nav -->
+    <nav>
+        <a href="index.html" class="nav-brand"><i class="fas fa-rocket" style="color:#3b82f6;"></i> NOVA CLOUD</a>
+        <div class="nav-links">
+            <a href="index.html#features">Platform</a>
+            <a href="pricing.html" style="color:#fff;">Pricing</a>
+            <a href="learn.html">Docs</a>
+            <a href="login.html">Sign In</a>
+            <a href="signup.html" class="btn-nav">Start Free</a>
+        </div>
+    </nav>
+
+    <div class="page">
+        <!-- Hero -->
+        <div class="pricing-hero">
+            <div class="tag-pill"><i class="fas fa-bolt" style="color:#fbbf24;"></i> Simple, transparent pricing</div>
+            <h1>Pay only for what<br>you actually use.</h1>
+            <p>From solo projects to global enterprise — Nova scales with you. No surprise bills, no DevOps tax.</p>
+
+            <!-- Toggle -->
+            <div class="toggle-wrap">
+                <button class="toggle-btn active" id="monthlyBtn" onclick="setBilling('monthly')">Monthly</button>
+                <button class="toggle-btn" id="annualBtn" onclick="setBilling('annual')">
+                    Annual <span class="save-badge" style="margin-left:8px;">Save 20%</span>
+                </button>
+            </div>
+
+            <!-- Plans -->
+            <div class="plans-grid" id="plansGrid">
+
+                <!-- Hobby -->
+                <div class="plan-card">
+                    <div class="plan-name">Hobby</div>
+                    <div class="plan-price">
+                        <div class="price-num" id="hobbyprice">$0</div>
+                        <div class="price-period">/ mo</div>
+                    </div>
+                    <div class="price-annual" id="hobbysub">&nbsp;</div>
+                    <div class="plan-desc">Perfect for personal projects, experiments, and open-source.</div>
+                    <a href="signup.html" class="plan-btn outline">Get Started Free</a>
+                    <ul class="features-list">
+                        <li class="feature-item"><i class="fas fa-check chk"></i> 3 containers</li>
+                        <li class="feature-item"><i class="fas fa-check chk"></i> 50 GB egress / mo</li>
+                        <li class="feature-item"><i class="fas fa-check chk"></i> Auto-deploy from Git</li>
+                        <li class="feature-item"><i class="fas fa-check chk"></i> Shared Edge nodes</li>
+                        <li class="feature-item"><i class="fas fa-check chk"></i> Community support</li>
+                        <li class="feature-item"><i class="fas fa-times cross"></i> Custom domains</li>
+                        <li class="feature-item"><i class="fas fa-times cross"></i> SLA guarantee</li>
+                    </ul>
+                </div>
+
+                <!-- Pro (featured) -->
+                <div class="plan-card featured">
+                    <div class="popular-badge">⚡ Most Popular</div>
+                    <div class="plan-name" style="color:#a5b4fc;">Pro</div>
+                    <div class="plan-price">
+                        <div class="price-num" id="proprice">$29</div>
+                        <div class="price-period">/ mo</div>
+                    </div>
+                    <div class="price-annual" id="prosub">Billed monthly</div>
+                    <div class="plan-desc">For teams shipping production-grade applications with guaranteed uptime.
+                    </div>
+                    <a href="signup.html?plan=pro" class="plan-btn primary">Start 14-Day Free Trial</a>
+                    <ul class="features-list">
+                        <li class="feature-item"><i class="fas fa-check chk"></i> <strong>Unlimited</strong> containers
+                        </li>
+                        <li class="feature-item"><i class="fas fa-check chk"></i> <strong>500 GB</strong> egress / mo
+                        </li>
+                        <li class="feature-item"><i class="fas fa-check chk"></i> Custom domains + SSL</li>
+                        <li class="feature-item"><i class="fas fa-check chk"></i> Dedicated Edge nodes</li>
+                        <li class="feature-item"><i class="fas fa-check chk"></i> 99.9% SLA</li>
+                        <li class="feature-item"><i class="fas fa-check chk"></i> Priority support (24h)</li>
+                        <li class="feature-item"><i class="fas fa-check chk"></i> Advanced analytics</li>
+                    </ul>
+                </div>
+
+                <!-- Enterprise -->
+                <div class="plan-card">
+                    <div class="plan-name">Enterprise</div>
+                    <div class="plan-price">
+                        <div class="price-num">Custom</div>
+                    </div>
+                    <div class="price-annual">&nbsp;</div>
+                    <div class="plan-desc">Dedicated infrastructure, compliance, and white-glove onboarding for large
+                        teams.</div>
+                    <a href="mailto:sales@nova.cloud" class="plan-btn outline">Talk to Sales</a>
+                    <ul class="features-list">
+                        <li class="feature-item"><i class="fas fa-check chk"></i> Everything in Pro</li>
+                        <li class="feature-item"><i class="fas fa-check chk"></i> Dedicated hardware region</li>
+                        <li class="feature-item"><i class="fas fa-check chk"></i> HIPAA / SOC 2 compliance</li>
+                        <li class="feature-item"><i class="fas fa-check chk"></i> SSO &amp; LDAP integration</li>
+                        <li class="feature-item"><i class="fas fa-check chk"></i> 99.99% SLA</li>
+                        <li class="feature-item"><i class="fas fa-check chk"></i> Dedicated Slack channel</li>
+                        <li class="feature-item"><i class="fas fa-check chk"></i> Custom contract terms</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Compare Table -->
+        <div class="compare-section">
+            <h2>Full comparison</h2>
+            <p class="sub">Every feature, side by side.</p>
+            <table class="compare-table">
+                <thead>
+                    <tr>
+                        <th style="width:34%;">Feature</th>
+                        <th style="width:22%;">Hobby</th>
+                        <th style="width:22%;" class="col-featured">Pro</th>
+                        <th style="width:22%;">Enterprise</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Containers</td>
+                        <td>3</td>
+                        <td class="col-featured">Unlimited</td>
+                        <td>Unlimited</td>
+                    </tr>
+                    <tr>
+                        <td>Egress / month</td>
+                        <td>50 GB</td>
+                        <td class="col-featured">500 GB</td>
+                        <td>Custom</td>
+                    </tr>
+                    <tr>
+                        <td>Cold-start time</td>
+                        <td>~0.2ms</td>
+                        <td class="col-featured">~0.2ms</td>
+                        <td>~0.1ms</td>
+                    </tr>
+                    <tr>
+                        <td>Custom domains</td>
+                        <td>—</td>
+                        <td class="col-featured">✓</td>
+                        <td>✓</td>
+                    </tr>
+                    <tr>
+                        <td>SLA</td>
+                        <td>—</td>
+                        <td class="col-featured">99.9%</td>
+                        <td>99.99%</td>
+                    </tr>
+                    <tr>
+                        <td>Edge regions</td>
+                        <td>Shared (42)</td>
+                        <td class="col-featured">Dedicated (42)</td>
+                        <td>Private region</td>
+                    </tr>
+                    <tr>
+                        <td>Analytics</td>
+                        <td>Basic</td>
+                        <td class="col-featured">Advanced</td>
+                        <td>Custom</td>
+                    </tr>
+                    <tr>
+                        <td>Support</td>
+                        <td>Community</td>
+                        <td class="col-featured">Priority (24h)</td>
+                        <td>Dedicated CSM</td>
+                    </tr>
+                    <tr>
+                        <td>Compliance</td>
+                        <td>—</td>
+                        <td class="col-featured">—</td>
+                        <td>HIPAA, SOC 2</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- FAQ -->
+        <div class="faq-section">
+            <h2>Frequently asked questions</h2>
+            <div class="faq-grid">
+                <div class="faq-item">
+                    <h3>Do I need a credit card for the free tier?</h3>
+                    <p>No. Sign up with just your email and start deploying immediately. Credit card required only when
+                        upgrading to Pro.</p>
+                </div>
+                <div class="faq-item">
+                    <h3>What happens if I exceed my egress limit?</h3>
+                    <p>We'll notify you at 80% and 100% usage. Going over adds $0.09 per extra GB for Hobby; Pro users
+                        get a grace buffer before overage kicks in.</p>
+                </div>
+                <div class="faq-item">
+                    <h3>Can I switch plans anytime?</h3>
+                    <p>Yes. Upgrade or downgrade at any time from your billing settings. Proration is calculated
+                        automatically to the hour.</p>
+                </div>
+                <div class="faq-item">
+                    <h3>What languages are supported?</h3>
+                    <p>All plans support Node.js, Python, Go, Rust, and static sites. Nova auto-detects your stack — no
+                        Dockerfile, no config yaml needed.</p>
+                </div>
+                <div class="faq-item">
+                    <h3>Is there a student or OSS discount?</h3>
+                    <p>Yes! Students with a .edu email get Pro free for 12 months. Open-source maintainers can apply for
+                        free Pro through our GitHub Sponsors page.</p>
+                </div>
+                <div class="faq-item">
+                    <h3>How does the 14-day trial work?</h3>
+                    <p>You get full Pro access immediately with no charge. If you don't cancel in 14 days you'll be
+                        billed at your chosen billing cycle.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="cta-section">
+        <div class="cta-box">
+            <h2>Start shipping in 60 seconds.</h2>
+            <p>No Dockerfile. No YAML. No cluster headaches. Just <code
+                    style="color:#a5b4fc; font-family:monospace;">nova deploy ./my-app</code> and you're live.</p>
+            <a href="signup.html" class="btn-cta"><i class="fas fa-rocket" style="margin-right:8px;"></i>Create Free
+                Account</a>
+        </div>
+    </div>
+
+    <footer>
+        <div style="margin-bottom:1rem;">
+            <strong style="color:#fff; font-size:1.1rem;"><i class="fas fa-rocket"
+                    style="color:#3b82f6; margin-right:6px;"></i>NOVA CLOUD</strong>
+        </div>
+        <div>Building the high-performance computing foundation for the post-container era.</div>
+        <div style="margin-top:1.5rem; display:flex; justify-content:center; gap:2rem;">
+            <a href="#" style="color:var(--muted); text-decoration:none;">Terms</a>
+            <a href="#" style="color:var(--muted); text-decoration:none;">Privacy</a>
+            <a href="https://github.com/m7moud2/nova-container-system"
+                style="color:var(--muted); text-decoration:none;"><i class="fab fa-github"></i> GitHub</a>
+        </div>
+    </footer>
+
+    <script>
+        const prices = {
+            monthly: { hobby: '$0', pro: '$29', hobbyNote: '', proNote: 'Billed monthly' },
+            annual: { hobby: '$0', pro: '$23', hobbyNote: '', proNote: 'Billed $276/yr (save $72)' }
+        };
+
+        let current = 'monthly';
+
+        function setBilling(mode) {
+            current = mode;
+            document.getElementById('monthlyBtn').classList.toggle('active', mode === 'monthly');
+            document.getElementById('annualBtn').classList.toggle('active', mode === 'annual');
+
+            const p = prices[mode];
+            // Animate price change
+            const proPriceEl = document.getElementById('proprice');
+            proPriceEl.style.opacity = '0';
+            proPriceEl.style.transform = 'translateY(-6px)';
+            setTimeout(() => {
+                document.getElementById('hobbyprice').textContent = p.hobby;
+                proPriceEl.textContent = p.pro;
+                document.getElementById('hobbysub').textContent = p.hobbyNote;
+                document.getElementById('prosub').textContent = p.proNote;
+                proPriceEl.style.opacity = '1';
+                proPriceEl.style.transform = 'translateY(0)';
+            }, 200);
+        }
+
+        // Init smooth transition style
+        document.getElementById('proprice').style.transition = 'opacity 0.2s, transform 0.2s';
+    </script>
+</body>
+
+</html>

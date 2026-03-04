@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Billing | Nova Cloud</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="dashboard-shared.css">
+    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+    <style>
+        .billing-summary {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .billing-card {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .billing-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--brand-primary), var(--brand-secondary));
+            opacity: 0.5;
+        }
+
+        .billing-card-title {
+            color: #94a3b8;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+        }
+
+        .billing-card-value {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #f8fafc;
+        }
+
+        .billing-card-sub {
+            font-size: 0.85rem;
+            color: #64748b;
+            margin-top: 8px;
+        }
+
+        .payment-methods,
+        .invoice-history {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-header h2 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin: 0;
+            color: #f8fafc;
+        }
+
+        .method-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 1.5rem;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            margin-bottom: 1rem;
+        }
+
+        .method-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .method-icon {
+            width: 48px;
+            height: 32px;
+            background: #fff;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #1e293b;
+            font-size: 1.2rem;
+        }
+
+        .method-details h4 {
+            margin: 0 0 4px 0;
+            color: #f8fafc;
+            font-size: 0.95rem;
+        }
+
+        .method-details p {
+            margin: 0;
+            color: #64748b;
+            font-size: 0.85rem;
+        }
+
+        .badge-default {
+            background: rgba(59, 130, 246, 0.1);
+            color: #60a5fa;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+
+        /* Invoice Table */
+        .premium-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+        }
+
+        .premium-table th {
+            text-align: left;
+            padding: 1rem 1.2rem;
+            color: #94a3b8;
+            font-weight: 600;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .premium-table td {
+            padding: 1rem 1.2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            color: #e2e8f0;
+        }
+
+        .premium-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .status-paid {
+            color: #10b981;
+            background: rgba(16, 185, 129, 0.1);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .invoice-download {
+            color: #64748b;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .invoice-download:hover {
+            color: #3b82f6;
+        }
+
+        /* Modal specific */
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: #0f172a;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            width: 100%;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <i class="fas fa-rocket"></i> NOVA CLOUD
+            </div>
+            <nav class="sidebar-nav">
+                <a href="dashboard.html"><i class="fas fa-grid-2"></i> Overview</a>
+                <a href="deployments.html"><i class="fas fa-boxes-stacked"></i> Deployments</a>
+                <a href="cloud_status.html"><i class="fas fa-globe"></i> Edge Network</a>
+                <a href="billing.html" class="active"><i class="fas fa-wallet"></i> Billing</a>
+                <a href="settings.html"><i class="fas fa-sliders"></i> Settings</a>
+                <a href="learn.html"><i class="fas fa-book"></i> Docs</a>
+            </nav>
+            <div class="user-profile" id="userProfile" style="cursor: pointer;">
+                <img src="" alt="User" id="sidebarAvatar">
+                <div class="user-info">
+                    <span class="name">Loading...</span>
+                    <span class="plan">Pro Plan</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="top-bar">
+                <h1>Billing & Usage</h1>
+                <div class="header-actions">
+                    <button class="btn btn-outline"><i class="fas fa-question-circle"></i> Support</button>
+                    <button class="btn btn-primary" onclick="openModal('paymentModal')"><i class="fas fa-plus"></i> Add
+                        Method</button>
+                </div>
+            </header>
+
+            <!-- Summary Cards -->
+            <div class="billing-summary">
+                <div class="billing-card">
+                    <div class="billing-card-title">Current Balance</div>
+                    <div class="billing-card-value">$42.50</div>
+                    <div class="billing-card-sub">Will be charged on Apr 1, 2026</div>
+                </div>
+                <div class="billing-card">
+                    <div class="billing-card-title">Compute Usage (MTD)</div>
+                    <div class="billing-card-value">1,425 <span style="font-size:1rem;color:#64748b;">GB-hrs</span>
+                    </div>
+                    <div class="billing-card-sub"><span style="color:#10b981;"><i class="fas fa-arrow-down"></i>
+                            12%</span> vs last month</div>
+                </div>
+                <div class="billing-card">
+                    <div class="billing-card-title">Bandwidth Egress</div>
+                    <div class="billing-card-value">1.2 <span style="font-size:1rem;color:#64748b;">TB</span></div>
+                    <div class="billing-card-sub">Of 5.0 TB Pro Plan limit</div>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 2rem;">
+                <!-- Payment Methods -->
+                <div class="payment-methods">
+                    <div class="section-header">
+                        <h2>Payment Methods</h2>
+                    </div>
+
+                    <div class="method-card">
+                        <div class="method-info">
+                            <div class="method-icon"><i class="fab fa-cc-visa"
+                                    style="color:#1434CB; font-size:1.5rem;"></i></div>
+                            <div class="method-details">
+                                <h4>Visa ending in 4242 <span class="badge-default">Default</span></h4>
+                                <p>Expires 12/28</p>
+                            </div>
+                        </div>
+                        <button class="btn btn-outline" style="padding: 6px 12px; font-size: 0.85rem;">Edit</button>
+                    </div>
+
+                    <div class="method-card" style="opacity: 0.7;">
+                        <div class="method-info">
+                            <div class="method-icon"><i class="fab fa-cc-mastercard"
+                                    style="color:#EB001B; font-size:1.5rem;"></i></div>
+                            <div class="method-details">
+                                <h4>Mastercard ending in 5555</h4>
+                                <p>Expires 08/26</p>
+                            </div>
+                        </div>
+                        <button class="btn btn-outline" style="padding: 6px 12px; font-size: 0.85rem;">Edit</button>
+                    </div>
+                </div>
+
+                <!-- Invoice History -->
+                <div class="invoice-history">
+                    <div class="section-header">
+                        <h2>Invoice History</h2>
+                        <button class="btn btn-outline" style="padding: 6px 12px; font-size: 0.85rem;">Download
+                            All</button>
+                    </div>
+
+                    <table class="premium-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Invoice ID</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Mar 1, 2026</td>
+                                <td
+                                    style="font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color:#94a3b8;">
+                                    INV-2026-03-A92B</td>
+                                <td>$29.00</td>
+                                <td><span class="status-paid">Paid</span></td>
+                                <td style="text-align: right;"><a href="#" class="invoice-download"><i
+                                            class="fas fa-download"></i></a></td>
+                            </tr>
+                            <tr>
+                                <td>Feb 1, 2026</td>
+                                <td
+                                    style="font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color:#94a3b8;">
+                                    INV-2026-02-C71X</td>
+                                <td>$29.00</td>
+                                <td><span class="status-paid">Paid</span></td>
+                                <td style="text-align: right;"><a href="#" class="invoice-download"><i
+                                            class="fas fa-download"></i></a></td>
+                            </tr>
+                            <tr>
+                                <td>Jan 1, 2026</td>
+                                <td
+                                    style="font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color:#94a3b8;">
+                                    INV-2026-01-M44P</td>
+                                <td>$29.00</td>
+                                <td><span class="status-paid">Paid</span></td>
+                                <td style="text-align: right;"><a href="#" class="invoice-download"><i
+                                            class="fas fa-download"></i></a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Payment Modal -->
+    <div id="paymentModal" class="modal-overlay">
+        <div class="modal-content" style="max-width: 450px;">
+            <div class="modal-header">
+                <h2 style="font-size: 1.25rem;">Add Payment Method</h2>
+                <button type="button" class="close-btn" onclick="closeModal('paymentModal')"
+                    style="background:transparent; border:none; color:#64748b; cursor:pointer; font-size:1.2rem;"><i
+                        class="fas fa-times"></i></button>
+            </div>
+            <p style="color: #94a3b8; font-size: 0.9rem; margin-bottom: 1.5rem;">Set up your secure billing with Nova
+                Cloud.</p>
+            <form id="paymentForm" onsubmit="event.preventDefault(); alert('Card saved!'); closeModal('paymentModal');">
+                <div class="form-group" style="margin-bottom: 1rem;">
+                    <label style="display:block; margin-bottom:6px; color:#cbd5e1; font-size:0.9rem;">Name on
+                        Card</label>
+                    <input type="text" placeholder="John Doe"
+                        style="width:100%; padding:10px 12px; background:rgba(0,0,0,0.2); border:1px solid rgba(255,255,255,0.1); border-radius:8px; color:#fff;"
+                        required>
+                </div>
+                <div class="form-group" style="margin-bottom: 1rem;">
+                    <label style="display:block; margin-bottom:6px; color:#cbd5e1; font-size:0.9rem;">Card
+                        Number</label>
+                    <div style="position:relative;">
+                        <i class="far fa-credit-card"
+                            style="position:absolute; left:12px; top:12px; color:#64748b;"></i>
+                        <input type="text" placeholder="0000 0000 0000 0000" maxlength="19"
+                            style="width:100%; padding:10px 12px 10px 36px; background:rgba(0,0,0,0.2); border:1px solid rgba(255,255,255,0.1); border-radius:8px; color:#fff;"
+                            required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label style="display:block; margin-bottom:6px; color:#cbd5e1; font-size:0.9rem;">Expiry
+                            (MM/YY)</label>
+                        <input type="text" placeholder="12/25" maxlength="5"
+                            style="width:100%; padding:10px 12px; background:rgba(0,0,0,0.2); border:1px solid rgba(255,255,255,0.1); border-radius:8px; color:#fff;"
+                            required>
+                    </div>
+                    <div class="form-group">
+                        <label style="display:block; margin-bottom:6px; color:#cbd5e1; font-size:0.9rem;">CVC</label>
+                        <input type="password" placeholder="123" maxlength="4"
+                            style="width:100%; padding:10px 12px; background:rgba(0,0,0,0.2); border:1px solid rgba(255,255,255,0.1); border-radius:8px; color:#fff;"
+                            required>
+                    </div>
+                </div>
+                <div class="modal-footer" style="margin-top: 2rem; display:flex; gap:1rem; justify-content:flex-end;">
+                    <button type="button" class="btn btn-outline" onclick="closeModal('paymentModal')">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Card <i class="fas fa-lock"
+                            style="margin-left:6px; font-size:0.8rem;"></i></button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Make sure dashboard.js is loaded for sidebar active state and basic functions -->
+    <script src="js/dashboard.js"></script>
+    <script>
+        function openModal(id) {
+            document.getElementById(id).classList.add('active');
+        }
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('active');
+        }
+    </script>
+</body>
+
+</html>
