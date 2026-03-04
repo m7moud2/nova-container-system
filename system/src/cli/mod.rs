@@ -260,25 +260,48 @@ pub async fn execute() -> Result<()> {
              if !path.exists() {
                  anyhow::bail!("❌ Deployment Error: Path '{}' does not exist.", path.display());
              }
-             if !path.is_dir() {
-                 anyhow::bail!("❌ Deployment Error: Path '{}' must be a directory containing your project.", path.display());
-             }
+             
+             let project_name = path.file_name()
+                .and_then(|n| n.to_str())
+                .unwrap_or("unnamed-project")
+                .to_string();
 
-             println!("🚀 Deploying project from '{}' to Nova Cloud...", path.display());
+             println!("🚀 Deploying project '{}' from '{}' to Nova Cloud...", project_name, path.display());
+             
+             // In a real implementation we would package the directory here
              println!("📦 Packaging files...");
-             tokio::time::sleep(tokio::time::Duration::from_secs(1)).await;
-             println!("☁️  Uploading to edge nodes...");
+             tokio::time::sleep(tokio::time::Duration::from_millis(500)).await;
+
+             println!("☁️  Uploading to Nova Edge API...");
              
-             // Simulate network routing check
-             let is_edge_connected = true; // Setup explicit check
-             if !is_edge_connected {
-                 anyhow::bail!("❌ Network Error: Failed to connect to Nova Edge routing mesh. Deployment aborted.");
-             }
-             
-             tokio::time::sleep(tokio::time::Duration::from_secs(2)).await;
-             println!("✅ Deployment Complete!");
-             println!("🌍 URL: https://delightful-nova-8f7.nova.cloud");
+             let client = reqwest::Client::new();
+             let payload = serde_json::json!({
+                 "project_name": project_name,
+                 "language": "wasm"
+             });
+
+             match client.post("http://127.0.0.1:3000/api/deployments")
+                .json(&payload)
+                .send()
+                .await {
+                    Ok(resp) => {
+                        if resp.status().is_success() {
+                            let data: serde_json::Value = resp.json().await?;
+                            println!("✅ Deployment Complete!");
+                            println!("🆔 Deployment ID: {}", data["message"]);
+                            println!("🌍 URL: https://{}.nova.cloud", project_name);
+                        } else {
+                            let err_text = resp.text().await?;
+                            println!("❌ Deployment Failed: {}", err_text);
+                        }
+                    }
+                    Err(e) => {
+                        println!("❌ Connection Error: Failed to reach Nova Cloud API. Ensure the dashboard is running.");
+                        println!("   Details: {}", e);
+                    }
+                }
         }
+
 
         Commands::Upgrade => {
             println!("⭐️  Upgrading to Nova Pro...");

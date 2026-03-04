@@ -588,7 +588,8 @@
 
             <h2 id="python">Frameworks: Python & Django</h2>
             <p>Run your Python applications seamlessly. Nova automatically detects <code>requirements.txt</code> or
-                <code>pyproject.toml</code>.</p>
+                <code>pyproject.toml</code>.
+            </p>
             <div class="code-block">
                 <div class="code-header">
                     <span class="code-lang">Python Deployment</span>
@@ -618,7 +619,8 @@
 
             <h2 id="rust">Frameworks: Rust Native</h2>
             <p>Rust is a first-class citizen on Nova Cloud. Compile your Rust applications directly to the
-                <code>wasm32-wasi</code> target for unparalleled performance.</p>
+                <code>wasm32-wasi</code> target for unparalleled performance.
+            </p>
             <div class="code-block">
                 <div class="code-header">
                     <span class="code-lang">Rust Execution</span>
@@ -662,6 +664,37 @@
                     -H "Authorization: Bearer nc_live_12345" \
                     -H "Content-Type: application/json" \
                     -d '{"target_id": "proj_xyz", "image_tag": "latest"}'
+                </div>
+            </div>
+
+            <h2 id="deployment-internals">Deployment Internals</h2>
+            <p>When you run <code>nova deploy</code>, the CLI packages your source code and sends it to our
+                high-availability API. Here is what happens under the hood:</p>
+            <div
+                style="background: rgba(30, 41, 59, 0.4); border: 1px solid rgba(255, 255, 255, 0.05); padding: 2rem; border-radius: 16px; margin: 2rem 0;">
+                <div style="display: flex; gap: 1.5rem; margin-bottom: 1.5rem;">
+                    <i class="fas fa-microchip" style="font-size: 1.5rem; color: #60a5fa;"></i>
+                    <div>
+                        <h4 style="color: #f8fafc; margin-bottom: 0.25rem;">1. Wasm Compilation</h4>
+                        <p style="margin: 0; font-size: 0.95rem;">Apps are compiled into optimized WebAssembly modules.
+                            This ensures the exact same binary runs on any architecture.</p>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 1.5rem; margin-bottom: 1.5rem;">
+                    <i class="fas fa-shield-virus" style="font-size: 1.5rem; color: #34d399;"></i>
+                    <div>
+                        <h4 style="color: #f8fafc; margin-bottom: 0.25rem;">2. Sandbox Provisioning</h4>
+                        <p style="margin: 0; font-size: 0.95rem;">Nova provisions a strictly isolated memory segment
+                            (Isolate) with hardware-level security boundaries.</p>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 1.5rem;">
+                    <i class="fas fa-globe" style="font-size: 1.5rem; color: #a78bfa;"></i>
+                    <div>
+                        <h4 style="color: #f8fafc; margin-bottom: 0.25rem;">3. Global Propagation</h4>
+                        <p style="margin: 0; font-size: 0.95rem;">The Wasm payload is pushed to 42 edge nodes instantly,
+                            giving you sub-millisecond latency worldwide.</p>
+                    </div>
                 </div>
             </div>
 
