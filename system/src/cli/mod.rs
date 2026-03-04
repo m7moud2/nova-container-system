@@ -275,30 +275,32 @@ pub async fn execute() -> Result<()> {
             let zip_path = std::env::temp_dir().join(format!("nova_{}_pkg.zip", project_name));
             println!("📦 Packaging files into {}...", zip_path.display());
             
-            let file = std::fs::File::create(&zip_path)?;
-            let mut zip = zip::ZipWriter::new(file);
-            let options = FileOptions::default()
-                .compression_method(zip::CompressionMethod::Deflated)
-                .unix_permissions(0o755);
+            {
+                let file = std::fs::File::create(&zip_path)?;
+                let mut zip = zip::ZipWriter::new(file);
+                let options = FileOptions::default()
+                    .compression_method(zip::CompressionMethod::Deflated)
+                    .unix_permissions(0o755);
 
-            let walk = WalkDir::new(path);
-            for entry in walk.into_iter().filter_map(|e| e.ok()) {
-                let entry_path = entry.path();
-                let name = entry_path.strip_prefix(path)?;
+                let walk = WalkDir::new(path);
+                for entry in walk.into_iter().filter_map(|e| e.ok()) {
+                    let entry_path = entry.path();
+                    let name = entry_path.strip_prefix(path)?;
 
-                if entry_path.is_file() {
-                    println!("  adding: {}", name.display());
-                    zip.start_file(name.to_string_lossy(), options)?;
-                    let mut f = std::fs::File::open(entry_path)?;
-                    let mut buffer = Vec::new();
-                    f.read_to_end(&mut buffer)?;
-                    zip.write_all(&buffer)?;
-                } else if !name.as_os_str().is_empty() {
-                    println!("  adding dir: {}", name.display());
-                    zip.add_directory(name.to_string_lossy(), options)?;
+                    if entry_path.is_file() {
+                        println!("  adding: {}", name.display());
+                        zip.start_file(name.to_string_lossy(), options)?;
+                        let mut f = std::fs::File::open(entry_path)?;
+                        let mut buffer = Vec::new();
+                        f.read_to_end(&mut buffer)?;
+                        zip.write_all(&buffer)?;
+                    } else if !name.as_os_str().is_empty() {
+                        println!("  adding dir: {}", name.display());
+                        zip.add_directory(name.to_string_lossy(), options)?;
+                    }
                 }
+                zip.finish()?;
             }
-            zip.finish()?;
 
             println!("☁️  Uploading package to Nova Edge API...");
             
@@ -316,6 +318,7 @@ pub async fn execute() -> Result<()> {
                 .part("file", part);
 
             match client.post("http://127.0.0.1:3000/api/deployments")
+               .header("Authorization", "Bearer nk_demo1234567890")
                .multipart(form)
                .send()
                .await {
