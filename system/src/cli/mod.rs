@@ -7,6 +7,9 @@ use crate::core::scheduler;
 use crate::core::runtime;
 use crate::core::builder;
 use crate::api;
+use std::io::{Read, Write};
+use walkdir::WalkDir;
+use zip::write::FileOptions;
 
 #[derive(Parser)]
 #[command(name = "nova")]
@@ -257,49 +260,84 @@ pub async fn execute() -> Result<()> {
         }
 
         Commands::Deploy { path } => {
-             if !path.exists() {
-                 anyhow::bail!("❌ Deployment Error: Path '{}' does not exist.", path.display());
-             }
-             
-             let project_name = path.file_name()
-                .and_then(|n| n.to_str())
-                .unwrap_or("unnamed-project")
-                .to_string();
+            if !path.exists() {
+                anyhow::bail!("❌ Deployment Error: Path '{}' does not exist.", path.display());
+            }
+            
+            let project_name = path.file_name()
+               .and_then(|n| n.to_str())
+               .unwrap_or("unnamed-project")
+               .to_string();
 
-             println!("🚀 Deploying project '{}' from '{}' to Nova Cloud...", project_name, path.display());
-             
-             // In a real implementation we would package the directory here
-             println!("📦 Packaging files...");
-             tokio::time::sleep(tokio::time::Duration::from_millis(500)).await;
+            println!("🚀 Deploying project '{}' from '{}' to Nova Cloud...", project_name, path.display());
+            
+            // 1. Create a temporary zip file
+            let zip_path = std::env::temp_dir().join(format!("nova_{}_pkg.zip", project_name));
+            println!("📦 Packaging files into {}...", zip_path.display());
+            
+            let file = std::fs::File::create(&zip_path)?;
+            let mut zip = zip::ZipWriter::new(file);
+            let options = FileOptions::default()
+                .compression_method(zip::CompressionMethod::Deflated)
+                .unix_permissions(0o755);
 
-             println!("☁️  Uploading to Nova Edge API...");
-             
-             let client = reqwest::Client::new();
-             let payload = serde_json::json!({
-                 "project_name": project_name,
-                 "language": "wasm"
-             });
+            let walk = WalkDir::new(path);
+            for entry in walk.into_iter().filter_map(|e| e.ok()) {
+                let entry_path = entry.path();
+                let name = entry_path.strip_prefix(path)?;
 
-             match client.post("http://127.0.0.1:3000/api/deployments")
-                .json(&payload)
-                .send()
-                .await {
-                    Ok(resp) => {
-                        if resp.status().is_success() {
-                            let data: serde_json::Value = resp.json().await?;
-                            println!("✅ Deployment Complete!");
-                            println!("🆔 Deployment ID: {}", data["message"]);
-                            println!("🌍 URL: https://{}.nova.cloud", project_name);
-                        } else {
-                            let err_text = resp.text().await?;
-                            println!("❌ Deployment Failed: {}", err_text);
-                        }
-                    }
-                    Err(e) => {
-                        println!("❌ Connection Error: Failed to reach Nova Cloud API. Ensure the dashboard is running.");
-                        println!("   Details: {}", e);
-                    }
+                if entry_path.is_file() {
+                    println!("  adding: {}", name.display());
+                    zip.start_file(name.to_string_lossy(), options)?;
+                    let mut f = std::fs::File::open(entry_path)?;
+                    let mut buffer = Vec::new();
+                    f.read_to_end(&mut buffer)?;
+                    zip.write_all(&buffer)?;
+                } else if !name.as_os_str().is_empty() {
+                    println!("  adding dir: {}", name.display());
+                    zip.add_directory(name.to_string_lossy(), options)?;
                 }
+            }
+            zip.finish()?;
+
+            println!("☁️  Uploading package to Nova Edge API...");
+            
+            let client = reqwest::Client::new();
+            
+            // Create multipart form
+            let file_bytes = std::fs::read(&zip_path)?;
+            let part = reqwest::multipart::Part::bytes(file_bytes)
+                .file_name("project.zip")
+                .mime_str("application/zip")?;
+
+            let form = reqwest::multipart::Form::new()
+                .text("project_name", project_name.clone())
+                .text("language", "wasm") // Default for now
+                .part("file", part);
+
+            match client.post("http://127.0.0.1:3000/api/deployments")
+               .multipart(form)
+               .send()
+               .await {
+                   Ok(resp) => {
+                       if resp.status().is_success() {
+                           let data: serde_json::Value = resp.json().await?;
+                           println!("✅ Deployment Complete!");
+                           println!("🆔 Deployment ID: {}", data["deployment_id"]);
+                           println!("🌍 URL: https://{}.nova.cloud", project_name);
+                       } else {
+                           let err_text = resp.text().await?;
+                           println!("❌ Deployment Failed: {}", err_text);
+                       }
+                   }
+                   Err(e) => {
+                       println!("❌ Connection Error: Failed to reach Nova Cloud API. Ensure the dashboard is running.");
+                       println!("   Details: {}", e);
+                   }
+               }
+               
+            // Cleanup
+            let _ = std::fs::remove_file(&zip_path);
         }
 
 

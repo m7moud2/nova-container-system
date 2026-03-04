@@ -1,9 +1,9 @@
-use axum::{
-    extract::{State, Query},
+    extract::{State, Query, Multipart},
     http::StatusCode,
     response::{IntoResponse, sse::{Event, Sse}},
     Json,
 };
+use std::io::Write;
 use std::convert::Infallible;
 // No longer using Stream/StreamExt directly in this file as of last refactor
 use serde::{Deserialize, Serialize};
@@ -350,7 +350,7 @@ pub async fn get_stats(State(db): State<Db>) -> impl IntoResponse {
 pub async fn deploy_project(
     State(db): State<Db>,
     headers: axum::http::HeaderMap,
-    Json(payload): Json<DeployRequest>,
+    mut multipart: Multipart,
 ) -> impl IntoResponse {
     // 1. Extract and validate token
     let token = match headers.get("Authorization") {
@@ -366,8 +366,23 @@ pub async fn deploy_project(
         Err(_) => return (StatusCode::UNAUTHORIZED, Json(serde_json::json!({"error": "Invalid token"}))).into_response(),
     };
 
+    let mut project_name = String::new();
+    let mut language = None;
+    let mut file_data = Vec::new();
+
+    while let Ok(Some(field)) = multipart.next_field().await {
+        let name = field.name().unwrap_or_default().to_string();
+        if name == "project_name" {
+            project_name = field.text().await.unwrap_or_default();
+        } else if name == "language" {
+            language = Some(field.text().await.unwrap_or_default());
+        } else if name == "file" {
+            file_data = field.bytes().await.unwrap_or_default().to_vec();
+        }
+    }
+
     // Validate project name
-    if payload.project_name.is_empty() || payload.project_name.len() > 50 {
+    if project_name.is_empty() || project_name.len() > 50 {
         return (
             StatusCode::BAD_REQUEST,
             Json(serde_json::json!({
@@ -376,7 +391,7 @@ pub async fn deploy_project(
         ).into_response();
     }
     
-    if !payload.project_name.chars().all(|c| c.is_alphanumeric() || c == '-') {
+    if !project_name.chars().all(|c| c.is_alphanumeric() || c == '-') {
         return (
             StatusCode::BAD_REQUEST,
             Json(serde_json::json!({
@@ -389,11 +404,11 @@ pub async fn deploy_project(
     let id = match db::create_project(
         &db,
         claims.user_id,
-        &payload.project_name,
+        &project_name,
         "deploying", // initial state
         "7a2b9d1", // mock commit
         "", // db.rs will set current time
-        &payload.language.unwrap_or_else(|| "node".to_string()),
+        &language.clone().unwrap_or_else(|| "node".to_string()),
     ) {
         Ok(i) => i,
         Err(e) => return (
@@ -414,17 +429,27 @@ pub async fn deploy_project(
         }
     };
 
+    // Store the uploaded zip file
+    let storage_dir = "/tmp/nova_uploads";
+    let _ = std::fs::create_dir_all(storage_dir);
+    let pkg_path = format!("{}/{}_{}.zip", storage_dir, id, deployment_id);
+    if !file_data.is_empty() {
+        let _ = std::fs::write(&pkg_path, &file_data);
+    }
+
     // 3. Trigger Engine Integration
     let db_clone = db.clone();
     let id_clone = id.clone();
     let d_id_clone = deployment_id.clone();
-    let proj_name = payload.project_name.clone();
+    let proj_name_clone = project_name.clone();
     tokio::spawn(async move {
-        println!("🚀 API: Triggering deployment for {} (ID: {})", proj_name, id_clone);
+        println!("🚀 API: Triggering deployment for {} (ID: {})", proj_name_clone, id_clone);
         tokio::time::sleep(std::time::Duration::from_secs(1)).await;
         
+        let _ = db::add_log(&db_clone, &id_clone, &d_id_clone, "INFO", "Extracting package and analyzing code...");
+        
         // Connect to internal Rust execution engine with a real Wasm stub
-        let fake_path = format!("/tmp/nova_deploy_{}.wasm", id_clone);
+        let fake_wasm_path = format!("/tmp/nova_deploy_{}.wasm", id_clone);
         
         // Write a tiny valid WASM module (exports empty _start function)
         let dummy_wasm: &[u8] = &[
@@ -434,9 +459,9 @@ pub async fn deploy_project(
             0x07, 0x0a, 0x01, 0x06, 0x5f, 0x73, 0x74, 0x61, 0x72, 0x74, 0x00, 0x00, // Export "_start"
             0x0a, 0x04, 0x01, 0x02, 0x00, 0x0b              // Code section
         ];
-        let _ = std::fs::write(&fake_path, dummy_wasm);
+        let _ = std::fs::write(&fake_wasm_path, dummy_wasm);
         
-        match crate::core::scheduler::Scheduler::run_replicas(fake_path, 1, 100_000, Some(256), None).await {
+        match crate::core::scheduler::Scheduler::run_replicas(fake_wasm_path, 1, 100_000, Some(256), None).await {
             Ok(_) => {
                 let _ = db::update_project_status(&db_clone, &id_clone, "active");
                 let _ = db::update_deployment_status(&db_clone, &d_id_clone, "SUCCESS", None);
