@@ -9,8 +9,8 @@
         href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="stylesheet" href="dashboard-shared.css">
-    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="dashboard-shared.css?v=3">
+    <link rel="stylesheet" href="dashboard.css?v=3">
     <style>
         /* Modern Docs Layout for inside the dashboard */
         .main-content {
@@ -100,6 +100,7 @@
             margin-bottom: 1rem;
             background: linear-gradient(135deg, #ffffff 0%, #94a3b8 100%);
             -webkit-background-clip: text;
+            background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
@@ -347,12 +348,19 @@
                 <i class="fas fa-rocket"></i> NOVA CLOUD
             </div>
             <nav class="sidebar-nav">
-                <a href="dashboard.html"><i class="fas fa-grid-2"></i> Overview</a>
-                <a href="deployments.html"><i class="fas fa-boxes-stacked"></i> Deployments</a>
-                <a href="cloud_status.html"><i class="fas fa-globe"></i> Edge Network</a>
-                <a href="billing.html"><i class="fas fa-wallet"></i> Billing</a>
-                <a href="settings.html"><i class="fas fa-sliders"></i> Settings</a>
-                <a href="learn.html" class="active"><i class="fas fa-book"></i> Docs</a>
+                <div class="nav-section">General</div>
+                <a href="dashboard.html"><i class="fas fa-chart-line"></i> Overview</a>
+
+                <div class="nav-separator"></div>
+                <div class="nav-section">Infrastructure</div>
+                <a href="deployments.html"><i class="fas fa-layer-group"></i> Deployments</a>
+                <a href="cloud_status.html"><i class="fas fa-shield-halved"></i> Edge Network</a>
+
+                <div class="nav-separator"></div>
+                <div class="nav-section">Account</div>
+                <a href="billing.html"><i class="fas fa-credit-card"></i> Billing</a>
+                <a href="settings.html"><i class="fas fa-gear"></i> Settings</a>
+                <a href="learn.html" class="active"><i class="fas fa-circle-info"></i> Help & Docs</a>
             </nav>
             <div class="user-profile" id="userProfile" style="cursor: pointer;">
                 <img src="" alt="User" id="sidebarAvatar">
@@ -376,13 +384,14 @@
                         <h4>Getting Started</h4>
                         <a href="#introduction" class="docs-nav-link active">Introduction</a>
                         <a href="#quickstart" class="docs-nav-link">Deploying Projects</a>
+                        <a href="#configuration" class="docs-nav-link">Advanced Config</a>
                         <a href="#billing" class="docs-nav-link">Billing Phase 2</a>
                     </div>
                     <div class="docs-nav-group">
                         <h4>Platform Guides</h4>
                         <a href="#monitoring" class="docs-nav-link">Monitoring & Logs</a>
-                        <a href="#env" class="docs-nav-link">Environment Variables</a>
                         <a href="#cli" class="docs-nav-link">Remote CLI Access</a>
+                        <a href="#troubleshooting" class="docs-nav-link">Troubleshooting</a>
                     </div>
                 </aside>
 
@@ -397,7 +406,8 @@
                             <div class="callout-icon"><i class="fas fa-check-circle"></i></div>
                             <div class="callout-content">
                                 <p><strong>Tip:</strong> Everything you can do in this dashboard can also be automated
-                                    via our REST API using standard bearer token authentication.</p>
+                                    via our REST API using standard bearer token authentication. See the CLI section for
+                                    usage.</p>
                             </div>
                         </div>
 
@@ -435,6 +445,35 @@
                             </div>
                         </div>
 
+                        <h2 id="configuration">Advanced Configuration</h2>
+                        <p>For more complex applications with custom build requirements, you can add a
+                            <code>nova.json</code> file to the root of your project. This declarative configuration
+                            allows you to define custom build commands, environment variables, memory limits, and
+                            targeted deployment regions.
+                        </p>
+
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span class="code-lang">nova.json Example</span>
+                                <button class="code-copy"><i class="far fa-copy"></i> Copy</button>
+                            </div>
+                            <div class="code-content">
+                                <span class="token comment">// Example configuration for an API server</span>
+                                {
+                                <span class="token prompt">"name"</span>: "api-gateway",
+                                <span class="token prompt">"builds"</span>: [
+                                { "src": "package.json", "use": "@nova/node" }
+                                ],
+                                <span class="token prompt">"env"</span>: {
+                                "DATABASE_URL": "@my-secret-db-url",
+                                "NODE_ENV": "production"
+                                },
+                                <span class="token prompt">"regions"</span>: ["us-east-1", "eu-west-1",
+                                "ap-northeast-1"]
+                                }
+                            </div>
+                        </div>
+
                         <h2 id="billing">Phase 2: Understand Billing</h2>
                         <p>Nova Cloud uses a strict pay-as-you-go model. You never pay for idle resources because Nova
                             scales down to ZERO instantly.</p>
@@ -456,7 +495,7 @@
 
                         <h2 id="monitoring">Phase 3: Control & Monitoring</h2>
                         <p>Managing deployments in Production shouldn't be stressful. Your Project details page offers
-                            immediate control.</p>
+                            immediate control and deep observability.</p>
 
                         <ul>
                             <li><strong>Soft Restart:</strong> Restarting your container takes < 1ms, resulting in zero
@@ -464,11 +503,13 @@
                             <li><strong>Live Analytics:</strong> View your response times, memory peaks, and active
                                 requests rendered smoothly with Chart.js based metric aggregation.</li>
                             <li><strong>Streaming Logs:</strong> View STDOUT and STDERR from your application securely
-                                streamed via WebSockets to your browser in real time.</li>
+                                streamed via WebSockets to your browser in real time. Use filtering to isolate critical
+                                errors.</li>
                         </ul>
 
                         <h2 id="cli">Terminal & CLI Access</h2>
-                        <p>Use our CLI for robust local-to-cloud workflows.</p>
+                        <p>Use our CLI for robust local-to-cloud workflows, automation in CI/CD pipelines, and immediate
+                            tailing of logs directly from your terminal.</p>
 
                         <div class="code-block">
                             <div class="code-header">
@@ -478,8 +519,68 @@
                             <div class="code-content">
                                 <span class="token prompt">$</span> nova login
                                 <span class="token prompt">$</span> nova deploy ./frontend --name api-gateway
-                                <span class="token prompt">$</span> nova logs api-gateway --tail
+                                <span class="token prompt">$</span> nova logs api-gateway --tail --region us-east
                             </div>
+                        </div>
+
+                        <h2 id="troubleshooting">Troubleshooting & Common Issues</h2>
+                        <p>Encountering an issue? Review the solutions to the most common problems our users face when
+                            deploying to Nova Cloud.</p>
+
+                        <div class="callout" style="border-left-color: #f59e0b; flex-direction: column; gap: 0.5rem;">
+                            <h3
+                                style="margin: 0; font-size: 1.1rem; color: #f8fafc; display: flex; align-items: center; gap: 8px;">
+                                <i class="fas fa-exclamation-triangle" style="color: #f59e0b;"></i> Error: HTTP 502 Bad
+                                Gateway
+                            </h3>
+                            <p style="color: #94a3b8; font-size: 0.95rem;"><strong>Problem:</strong> Your deployment
+                                succeeded in the dashboard, but accessing your Nova URL returns a 502 error.</p>
+                            <p style="color: #94a3b8; font-size: 0.95rem;"><strong>Solution:</strong> This usually means
+                                your application failed to bind to the correct port. Our Edge nodes map ingress traffic
+                                to the <code>PORT</code> environment variable. Ensure your server code listens on the
+                                injected <code>PORT</code> and binds globally (e.g., <code>0.0.0.0</code>) rather than
+                                strictly tracking <code>localhost</code>.</p>
+                            <div class="code-block" style="margin: 0.5rem 0;">
+                                <div class="code-header"><span class="code-lang">Node.js Express Fix</span></div>
+                                <div class="code-content">
+                                    <span class="token comment">// Incorrect: app.listen(3000, 'localhost')</span>
+                                    <span class="token comment">// Correct implementation below:</span>
+                                    const PORT = process.env.PORT || 3000;
+                                    app.listen(PORT, '0.0.0.0', () => console.log(`Listening on ${PORT}`));
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="callout" style="border-left-color: #ef4444; flex-direction: column; gap: 0.5rem;">
+                            <h3
+                                style="margin: 0; font-size: 1.1rem; color: #f8fafc; display: flex; align-items: center; gap: 8px;">
+                                <i class="fas fa-times-circle" style="color: #ef4444;"></i> Build Failure: Out of Memory
+                                (OOM)
+                            </h3>
+                            <p style="color: #94a3b8; font-size: 0.95rem;"><strong>Problem:</strong> The Edge compiler
+                                crashes during the deployment build step with an
+                                <code>Exit Code 137 (Out of Memory)</code> error.
+                            </p>
+                            <p style="color: #94a3b8; font-size: 0.95rem;"><strong>Solution:</strong> Your
+                                <code>node_modules</code> or rust dependencies might be too large for the standard
+                                compiler instance. Add a <code>nova.json</code> file to limit concurrent compilation
+                                workers (e.g. <code>NPM_CONFIG_JOBS=1</code>), or upgrade your environment builder tier
+                                in Settings.
+                            </p>
+                        </div>
+
+                        <div class="callout" style="border-left-color: #3b82f6; flex-direction: column; gap: 0.5rem;">
+                            <h3
+                                style="margin: 0; font-size: 1.1rem; color: #f8fafc; display: flex; align-items: center; gap: 8px;">
+                                <i class="fas fa-info-circle" style="color: #3b82f6;"></i> Design Changes Not Updating?
+                            </h3>
+                            <p style="color: #94a3b8; font-size: 0.95rem;"><strong>Problem:</strong> You deployed a new
+                                CSS/JS version, but the dashboard or your live domain preview still displays the old
+                                styling.</p>
+                            <p style="color: #94a3b8; font-size: 0.95rem;"><strong>Solution:</strong> The Nova Edge
+                                Network aggressively caches static assets globally to provide sub-millisecond loads. Use
+                                the <strong>Clear Edge Cache</strong> button in your project settings, or manually
+                                append cache-busting suffixes (e.g., <code>?v=2</code>) to your stylesheet links.</p>
                         </div>
 
                         <br><br><br> <!-- Space for bottom scrolling -->
@@ -491,9 +592,11 @@
                     <div class="toc-title">On this page</div>
                     <a href="#introduction" class="toc-link active">Introduction</a>
                     <a href="#quickstart" class="toc-link">Deploying Projects</a>
+                    <a href="#configuration" class="toc-link">Advanced Config</a>
                     <a href="#billing" class="toc-link">Understanding Billing</a>
                     <a href="#monitoring" class="toc-link">Control & Monitoring</a>
                     <a href="#cli" class="toc-link">Terminal Access</a>
+                    <a href="#troubleshooting" class="toc-link">Troubleshooting</a>
                 </aside>
             </div>
 
